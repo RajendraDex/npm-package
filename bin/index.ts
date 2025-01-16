@@ -30,7 +30,7 @@ const program = new Command();
 program
   .name('create-project')
   .description('CLI to create a new project with all configurations')
-  .version('1.0.2');
+  .version('1.0.0');
 
 program
   .command('create')
