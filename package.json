@@ -12,6 +12,9 @@
     "lint1": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
+  "bin": {
+    "rejendra-npm-package": "./dist/bin/index.js"
+  },
   "keywords": [
     "project",
     "create",
