@@ -1,6 +1,6 @@
 {
-  "name": "rejendra-npm-package",
-  "version": "1.0.04",
+  "name": "rajendra-npm-package",
+  "version": "1.0.05",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "tsc",
@@ -14,7 +14,7 @@
     "prepare": "npm run build"
   },
   "bin": {
-    "rejendra-npm-package": "dist/bin/index.js"
+    "rajendra-npm-package": "dist/bin/index.js"
   },
   "_moduleAliases": {
     "@/*": "dist/src/*",
