@@ -1,6 +1,6 @@
 {
-  "name": "rajendra",
-  "version": "1.0.04",
+  "name": "rejendra-npm-package",
+  "version": "1.0.03",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "tsc",
