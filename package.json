@@ -1,0 +1,55 @@
+{
+  "name": "npm-package",
+  "version": "1.0.0",
+  "main": "dist/bin/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "bin": "node dist/bin/index.js",
+    "dev": "npm run build && npm run start",
+    "clean": "rm -rf dist",
+    "lint": "eslint .",
+    "lint1": "eslint . --ext .ts",
+    "format": "prettier --write ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "_moduleAliases": {
+    "@/*": "dist/src/*",
+    "@bin": "dist/bin",
+    "@utils": "dist/generator/utils",
+    "@writers": "dist/generator/writers",
+    "@base": "dist/generator/base",
+    "@prompt": "dist/generator/prompt",
+    "@project": "dist/generator/project",
+    "@template": "dist/generator/template",
+    "@observer": "dist/generator/observer",
+    "@generator": "dist/generator",
+    "@factory": "dist/generator/factory",
+    "@builder": "dist/generator/builder"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "inquirer": "^12.3.2",
+    "module-alias": "^2.2.3"
+  },
+  "devDependencies": {
+    "@eslint/compat": "^1.2.5",
+    "@eslint/js": "^9.18.0",
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.10.5",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.7.0",
+    "eslint-plugin-prettier": "^5.2.1",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.19.1"
+  }
+}

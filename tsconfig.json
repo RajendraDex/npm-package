@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@/*": ["src/*"],
+      "@bin/*": ["bin/*"],
+      "@utils/*": ["generator/utils/*"],
+      "@writers/*": ["generator/writers/*"],
+      "@base/*": ["generator/base/*"],
+      "@prompt/*": ["generator/prompt/*"],
+      "@project/*": ["generator/project/*"],
+      "@template/*": ["generator/template/*"],
+      "@observer/*": ["generator/observer/*"],
+      "@generator/*": ["generator/*"],
+      "@factory/*": ["generator/factory/*"],
+      "@builder/*": ["generator/builder/*"]
+    },
+    "incremental": true,
+    "removeComments": true,
+    "baseUrl": ".",
+    "sourceMap": true,
+    "outDir": "./dist",
+    "lib": ["dom", "ESNext"],
+    "target": "ES2020",
+    "module": "CommonJS",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node"
+  },
+  "include": ["src/**/*", "bin/**/*", "generator/**/*"],
+  "exclude": ["**/**/node_modules", "node_modules"]
+}
