@@ -4,12 +4,11 @@ import inquirer from 'inquirer';
 import path from 'path';
 import { questions } from '@prompt/index';
 
-export const main = async () => {
-  console.log('main');
-  const answers = await inquirer.prompt(questions as any);
+export const main = async (ans: any) => {
+  const answers = ans || (await inquirer.prompt(questions as any));
+  console.log("🚀 -------- file: index.ts:8 -------- main -------- answers:", answers);
 
   const projectPath = path.join(process.cwd(), answers.projectName);
-  console.log('🚀 -------- file: index.ts:12 -------- main -------- projectPath:', projectPath);
 
   const generator = new ProjectGenerator(projectPath);
   generator.generate(answers);
