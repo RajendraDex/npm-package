@@ -1,6 +1,6 @@
 {
   "name": "rejendra-npm-package",
-  "version": "1.0.03",
+  "version": "1.0.04",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "tsc",
