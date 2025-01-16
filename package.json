@@ -12,10 +12,16 @@
     "lint1": "eslint . --ext .ts",
     "format": "prettier --write ."
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "project",
+    "create",
+    "new",
+    "simple",
+    "command"
+  ],
+  "author": "Rajendra Rajendra <rajendrap.dexbytes.com>",
   "license": "ISC",
-  "description": "",
+  "description": "create a new project with a simple command",
   "_moduleAliases": {
     "@/*": "dist/src/*",
     "@bin": "dist/bin",
