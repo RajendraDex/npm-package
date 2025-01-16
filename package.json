@@ -1,5 +1,5 @@
 {
-  "name": "npm-package",
+  "name": "rejendra-npm-package",
   "version": "1.0.0",
   "main": "dist/bin/index.js",
   "scripts": {
@@ -19,7 +19,7 @@
     "simple",
     "command"
   ],
-  "author": "Rajendra Rajendra <rajendrap.dexbytes.com>",
+  "author": "Rajendra Rajendra <rajendrap.dexbytes@gmail.com>",
   "license": "ISC",
   "description": "create a new project with a simple command",
   "_moduleAliases": {
