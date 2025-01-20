@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as path from 'path';
+import { expressConfig, serverFactory, serverStrategy, readme, appBootstrap, indexExports } from '@writers/express';
 
 export class ProjectConfigBuilder {
   private config: any = {};
@@ -13,27 +14,77 @@ export class ProjectConfigBuilder {
     fs.writeFileSync(filePath, data, 'utf8');
   }
 
+
+  public addIndexExports(): this {
+    this.config.indexExports = indexExports;
+    return this;
+  }
+  public addAppBootstrap(): this {
+    this.config.appBootstrap = appBootstrap;
+    return this;
+  }
+
+  public addExpressConfig(): this {
+    this.config.expressConfig = expressConfig;
+    return this;
+  }
+
+  public addServerFactoryConfig(): this {
+    this.config.serverFactory = serverFactory;
+    return this;
+  }
+
+  public addServerStrategy(): this {
+    this.config.serverStrategy = serverStrategy;
+    return this;
+  }
+  public addServerReadme(): this {
+    this.config.serverReadme = readme;
+    return this;
+  }
+
   public addPackageJson(name: string): this {
     this.config.packageJson = {
       name,
       version: '1.0.0',
       scripts: {
-        start: 'node dist/index.js',
+        start: 'node dist/app.bootstrap.js',
         build: 'tsc',
         lint: 'eslint . --ext .ts',
         format: 'prettier --write .',
-        test: 'echo "No tests defined" && exit 0',
+      },
+      dependencies: {
+        express: '4.21.2',
+        dotenv: '16.4.7',
+        cors: '2.8.5',
+        helmet: '8.0.0',
+        compression: '1.7.5',
+        'express-rate-limit': '7.5.0',
+        morgan: '1.10.0',
+        'body-parser': '1.20.2',
+        'cookie-parser': '1.4.7',
+        'express-validator': '7.2.1',
+        'jsonwebtoken': '9.0.2',
+        bcrypt: '5.1.1',
+        winston: '3.17.0',
+        '@apollo/server': '4.11.3',
+        graphql: '16.10.0',
+        passport: '0.7.0',
       },
       devDependencies: {
-        typescript: '^5.0.0',
+        typescript: '^5.7.3',
         '@typescript-eslint/eslint-plugin': '^6.0.0',
         '@typescript-eslint/parser': '^6.0.0',
         eslint: '^8.0.0',
         prettier: '^3.0.0',
         'eslint-config-prettier': '^9.0.0',
         'eslint-plugin-prettier': '^5.0.0',
-        'ts-node': '^10.0.0',
         dotenv: '^16.0.0',
+        'ts-jest': '^29.2.5',
+        jest: '^29.7.0',
+        'jest-mock-extended': '^3.0.7',
+        supertest: '^7.0.0',
+        'ts-node': '^10.9.2',
       },
     };
     return this;
@@ -189,7 +240,44 @@ insert_final_newline = true
     return this;
   }
 
+  public addLicense(name: string): this {
+    this.config.license = `
+      # MIT License
+
+      Copyright (c) ${new Date().getFullYear()} ${name}
+
+      Permission is hereby granted, free of charge, to any person obtaining a copy
+      of this software and associated documentation files (the "Software"), to deal
+      in the Software without restriction, including without limitation the rights
+      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+      copies of the Software, and to permit persons to whom the Software is
+      furnished to do so, subject to the following conditions:
+
+      ***[Full license text here...]***
+    `.trim();
+    return this;
+  }
+
   public writeConfigFiles(projectPath: string): void {
+    if (this.config.appBootstrap) {
+      this.writeToFile(path.join(`${projectPath}/src/api`, 'app.bootstrap.ts'), this.config.appBootstrap);
+    }
+    if (this.config.indexExports) {
+      this.writeToFile(path.join(`${projectPath}/src/api/app`, 'index.ts'), this.config.indexExports);
+    }
+    if (this.config.expressConfig) {
+      this.writeToFile(path.join(`${projectPath}/src/api/app`, 'server.ts'), this.config.expressConfig);
+    }
+    if (this.config.serverFactory) {
+      this.writeToFile(path.join(`${projectPath}/src/api/app`, 'serverFactory.ts'), this.config.serverFactory);
+    }
+    if (this.config.serverStrategy) {
+      this.writeToFile(path.join(`${projectPath}/src/api/app`, 'serverStrategy.ts'), this.config.serverStrategy);
+    }
+    if (this.config.serverReadme) {
+      this.writeToFile(path.join(`${projectPath}/src/api/app`, 'readme.ts'), this.config.serverReadme);
+    }
+
     if (this.config.packageJson) {
       this.writeToFile(path.join(projectPath, 'package.json'), this.config.packageJson);
     }
@@ -235,23 +323,9 @@ insert_final_newline = true
     if (this.config.jestConfig) {
       this.writeToFile(path.join(projectPath, 'jest.config.js'), this.config.jestConfig);
     }
+
+    if (this.config.license) {
+      this.writeToFile(path.join(projectPath, 'LICENSE'), this.config.license);
+    }
   }
 }
-
-// Usage
-// const configBuilder = new ProjectConfigBuilder();
-// configBuilder
-//   .addPackageJson('my-project')
-//   .addTSConfig()
-//   .addESLint()
-//   .addPrettierConfig()
-//   .addEditorConfig()
-//   .addGitAttributes()
-//   .addGitIgnore()
-//   .addPM2Config()
-//   .addReadme('My Project')
-//   .addNvmrc()
-//   .addVSCodeSettings()
-//   .addEnv()
-//   .addEnvExample()
-//   .buildAndWrite();

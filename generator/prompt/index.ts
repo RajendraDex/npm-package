@@ -85,13 +85,15 @@ export const questions = [
     name: 'additionalFeatures',
     message: 'Select additional features you want to include:',
     choices: [
+      // These two file should be added by default
+      // { name: 'tsconfig.json', value: 'tsconfig.json' },
+      // { name: 'Package.json', value: 'package.json' },
+
+      { name: '.eslintrc.json', value: '.eslintrc.json' },
       { name: 'Linting (ESLint)', value: 'eslint' },
       { name: 'Testing (Jest)', value: 'jest' },
       { name: 'Prettier for code formatting', value: 'prettier' },
       { name: 'TypeScript support', value: 'typescript' },
-      { name: 'Package.json', value: 'package.json' },
-      { name: 'tsconfig.json', value: 'tsconfig.json' },
-      { name: '.eslintrc.json', value: '.eslintrc.json' },
       { name: '.prettierrc', value: '.prettierrc' },
       { name: '.prettierignore', value: '.prettierignore' },
       { name: '.editorconfig', value: '.editorconfig' },
@@ -103,6 +105,7 @@ export const questions = [
       { name: '.vscode/settings.json', value: '.vscode/settings.json' },
       { name: '.env', value: '.env' },
       { name: '.env.example', value: '.env.example' },
+      { name: 'License', value: 'license' },
     ],
     validate: (input: string) => {
       if (input.length === 0) return 'You must select at least one feature.';

@@ -189,4 +189,3 @@ const projectConfig = new ProjectConfigBuilder()
   .addVSCodeSettings()
   .build();
 
-console.log(projectConfig);

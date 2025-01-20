@@ -47,7 +47,6 @@ export class DirectoryBuilder {
     directories.forEach((dir) => {
       try {
         createDir(dir);
-        console.log(`Directory created: ${dir}`);
       } catch (error) {
         console.error(`Failed to create directory: ${dir}`, error);
       }

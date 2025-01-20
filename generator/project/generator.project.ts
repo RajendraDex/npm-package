@@ -16,7 +16,7 @@ export class ProjectGenerator {
     // Project initial config
     Promise.all([this.addProjectConfig(answers)]);
 
-    // // Create controllers
+    // TODO: need to implement controller
     // const controllerWriter = FileWriterFactory.createWriter('controller', 'User');
     // controllerWriter.writeFile(this.projectPath);
 
@@ -29,16 +29,17 @@ export class ProjectGenerator {
   public addProjectConfig(answers: any) {
     const { projectName, dbName, dbType, ormType, useDocker, dockerImage, additionalFeatures } = answers;
 
-    //* Feature based config
-    const featureBasedConfigBuilder = new FeatureBasedConfigBuilder(additionalFeatures, this.projectPath, projectName);
-
-    featureBasedConfigBuilder.buildAndWrite();
-
     //* Directory builder
     const directoryBuilder = new DirectoryBuilder(this.projectPath);
     directoryBuilder.createDirectoryStructure();
 
+    //* Feature based config
+    const featureBasedConfigBuilder = new FeatureBasedConfigBuilder(additionalFeatures, this.projectPath, projectName);
+    featureBasedConfigBuilder.buildAndWrite();
+
+
     // TODO: need to implement database config
+
     // // database config
     // const databaseConfigBuilder = new DatabaseConfigBuilder(
     //   dbName,

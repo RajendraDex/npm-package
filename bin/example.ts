@@ -20,44 +20,6 @@ interface ProjectAnswers {
   ormType: 'TypeORM' | 'Sequelize' | 'Prisma' | 'None';
 }
 
-// Define the questions with proper typing
-// const questions = [
-// 	{
-// 		type: 'input',
-// 		name: 'projectName',
-// 		message: 'Enter project name:',
-// 		default: 'my-node-ts-project',
-// 		validate: (input: string) => {
-// 			if (!input) return 'Project name cannot be empty.';
-// 			if (input.length < 3) return 'Project name should be at least 3 characters long.';
-// 			return true;
-// 		},
-// 	},
-// 	{
-// 		type: 'input',
-// 		name: 'dbName',
-// 		message: 'Enter database name:',
-// 		default: 'my_database',
-// 		validate: (input: string) => {
-// 			if (!input) return 'Database name cannot be empty.';
-// 			if (input.length < 3) return 'Database name should be at least 3 characters long.';
-// 			return true;
-// 		},
-// 	},
-// 	{
-// 		type: 'list',
-// 		name: 'dbType',
-// 		message: 'Choose database type:',
-// 		choices: ['MySQL', 'PostgreSQL', 'SQLite', 'MongoDB'],
-// 	},
-// 	{
-// 		type: 'list',
-// 		name: 'ormType',
-// 		message: 'Choose ORM type:',
-// 		choices: ['TypeORM', 'Sequelize', 'Prisma', 'None'],
-// 	},
-// ] as const;
-
 const questions = [
   {
     type: 'input',
@@ -162,9 +124,9 @@ const main = async () => {
     const answers = await inquirer.prompt(questions as any);
 
     // Optional: Display a warning after collecting inputs
-    console.log(
-      '\nWarning: Please ensure that the database and ORM types you selected are compatible with your project requirements.',
-    );
+    // console.log(
+    //   '\nWarning: Please ensure that the database and ORM types you selected are compatible with your project requirements.',
+    // );
 
     const { projectName, dbName, dbType, ormType } = answers;
     const projectPath = path.join(process.cwd(), projectName);

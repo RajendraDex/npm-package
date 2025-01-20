@@ -1,24 +1,4 @@
 import { ProjectConfigBuilder } from './projectConfig.builder';
-// const features = [
-//   'eslint',
-//   'jest',
-//   'prettier',
-//   'typescript',
-//   'package.json',
-//   'tsconfig.json',
-//   '.eslintrc.json',
-//   '.prettierrc',
-//   '.prettierignore',
-//   '.editorconfig',
-//   '.gitattributes',
-//   '.gitignore',
-//   'ecosystem.config.js',
-//   'README.md',
-//   '.nvmrc',
-//   '.vscode/settings.json',
-//   '.env',
-//   '.env.example',
-// ];
 
 export class FeatureBasedConfigBuilder extends ProjectConfigBuilder {
   private selectedFeatures: Set<string>;
@@ -33,12 +13,29 @@ export class FeatureBasedConfigBuilder extends ProjectConfigBuilder {
   }
 
   public buildAndWrite(): void {
-    if (this.selectedFeatures.has('package.json')) {
-      this.addPackageJson(this.projectName);
-    }
-    if (this.selectedFeatures.has('tsconfig.json')) {
-      this.addTSConfig();
-    }
+
+    /**
+     * !Default Express Configurations
+     * 
+     * * express app
+     * * server factory
+     * * server strategy
+     * * readme.md
+     * * package.json
+     * * tsconfig.json
+     */
+    this.addExpressConfig();
+    this.addServerFactoryConfig();
+    this.addServerStrategy();
+    this.addServerReadme();
+    this.addIndexExports();
+    this.addAppBootstrap();
+    this.addPackageJson(this.projectName);
+    this.addTSConfig();
+
+    /**
+     * !Selected by User during project generation
+     */
     if (this.selectedFeatures.has('.eslintrc.json')) {
       this.addESLint();
     }
@@ -75,6 +72,9 @@ export class FeatureBasedConfigBuilder extends ProjectConfigBuilder {
 
     if (this.selectedFeatures.has('jest')) {
       this.addJestConfig();
+    }
+    if (this.selectedFeatures.has('license')) {
+      this.addLicense(this.projectName);
     }
 
     //* Finally write the selected configurations to files

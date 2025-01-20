@@ -1,4 +1,3 @@
-// src/generator/writers/MiddlewareWriter.ts
 import { FileWriter } from '@base/fileWriter.base';
 
 export class MiddlewareWriter extends FileWriter {
@@ -10,11 +9,11 @@ export class MiddlewareWriter extends FileWriter {
   }
 
   protected getDirectoryName(): string {
-    return 'src/middleware';
+    return 'src/api/core/middleware';
   }
 
   protected getFileName(): string {
-    return `${this.middlewareName}Middleware.ts`;
+    return `${this.middlewareName}.middleware.ts`;
   }
 
   protected getFileContent(): string {

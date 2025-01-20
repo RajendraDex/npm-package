@@ -14,7 +14,6 @@ export const writeFile = async (filePath: string, content: string): Promise<void
     const dirPath = dirname(filePath);
     await createDir(dirPath); // Ensure the directory exists
     await fs.writeFile(filePath, content, 'utf8');
-    console.log(`File written successfully: ${filePath}`);
   } catch (error) {
     console.error(`Error writing file at ${filePath}: ${(error as Error).message}`);
     throw error;

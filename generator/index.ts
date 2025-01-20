@@ -6,7 +6,6 @@ import { questions } from '@prompt/index';
 
 export const main = async (ans: any) => {
   const answers = ans || (await inquirer.prompt(questions as any));
-  console.log("🚀 -------- file: index.ts:8 -------- main -------- answers:", answers);
 
   const projectPath = path.join(process.cwd(), answers.projectName);
 

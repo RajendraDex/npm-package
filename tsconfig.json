@@ -17,7 +17,9 @@
       "@observer/*": ["generator/observer/*"],
       "@generator/*": ["generator/*"],
       "@factory/*": ["generator/factory/*"],
-      "@builder/*": ["generator/builder/*"]
+      "@builder/*": ["generator/builder/*"],
+      "@routes/*": ["src/api/core/routes/*"],
+      "@routes/v1/*": ["src/api/core/routes/v1/*"]
     },
     "incremental": true,
     "removeComments": true,

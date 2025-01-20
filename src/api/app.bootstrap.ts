@@ -1,22 +1,21 @@
-// require('module-alias/register');
 
-// import { TYPEORM, ENV } from '@config/environment.config';
-// import { Logger } from '@services/logger.service';
-// import { ApplicationDataSource } from '@config/database.config';
-// import { Server } from '@config/server.config';
+import { Server, ServerStrategy, ServerFactory } from './app';
+async function bootstrap(): Promise<void> {
+	try {
+		const server = Server.getInstance();
+		await server.initialize();
 
-// ApplicationDataSource.initialize()
-// 	.then(() => {
-// 		Logger.log('info', `Connection to MySQL server established on port ${TYPEORM.PORT} (${ENV})`);
-// 	})
-// 	.catch((error: Error) => {
-// 		process.stdout.write(`error: ${error.message}`);
-// 		process.exit(1);
-// 	});
+		const app = server.getApp();
+		const port = process.env.PORT || 3000;
 
-// import { Application } from '@config/app.config';
+		const serverStrategy: ServerStrategy = ServerFactory.createServer(app, port);
+		serverStrategy.start();
+	} catch (error) {
+		console.error('Failed to start server:', error);
+		process.exit(1);
+	}
+}
 
-// const application = Application;
-// const server = Server.init(application).listen() as unknown;
+bootstrap();
 
-// export { application, server };
+export default Server.getInstance().getApp;

@@ -5,27 +5,11 @@ import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
 import ora from 'ora';
+import path from 'path';
 import { questions } from '../generator/prompt/index';
-import { main } from '../generator/index';
-
-
-// const questions = [
-//   {
-//     type: 'input',
-//     name: 'projectName',
-//     message: 'What is your project name?',
-//     default: providedName || 'my-awesome-project',
-//     when: !providedName
-//   },
-//   {
-//     type: 'list',
-//     name: 'projectType',
-//     message: 'What type of project do you want to create?',
-//     choices: ['node-ts', 'react-ts', 'express-ts']
-//   }
-// ]
-
+// import { main } from '../generator/index';
 const program = new Command();
+import { DirectoryCopier } from './cloneRepo';
 
 program
   .name('create-project')
@@ -36,42 +20,38 @@ program
   .command('create')
   .description('Create a new project')
   // .argument('[name]', 'Project name')
-  .action(async (providedName = null) => {
+  .action(async () => {
     try {
       const answers = await inquirer.prompt(questions as any);
 
-      const projectName = providedName || answers.projectName;
-      const spinner = ora('Creating project...').start();
+      const projectName = answers.projectName;
+      const spinner = ora('Creating project...\n').start();
+      const projectPath = path.join(process.cwd(), projectName);
 
-      // const configBuilder = new ProjectConfigBuilder();
-      // configBuilder
-      //   .addPackageJson(projectName)
-      //   .addTSConfig()
-      //   .addESLint()
-      //   .addPrettierConfig()
-      //   .addEditorConfig()
-      //   .addGitAttributes()
-      //   .addGitIgnore()
-      //   .addPM2Config()
-      //   .addReadme(projectName)
-      //   .addNvmrc()
-      //   .addVSCodeSettings()
-      //   .addEnv()
-      //   .addEnvExample()
-      //   .addJestConfig();
+      const boilerplatePath = path.join(process.cwd(), 'boilerplate');
 
-      // configBuilder.writeConfigFiles(`./${projectName}`);
-      main(answers);
+      /**
+       * * This function is used to create the project with the boilerplate
+       * * by file and folder creation with fs module(write file and folder)
+       */
+      // await main(answers); // ! working
 
-      spinner.succeed(chalk.green(`Project ${projectName} created successfully!`));
+      /**
+       * * This function is used to copy the boilerplate to the project path
+       * * by using the Copy whole project directory
+       */
+      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
 
-      console.log(chalk.blue('\nNext steps:'));
-      console.log(chalk.yellow(`1. cd ${projectName}`));
-      console.log(chalk.yellow('2. npm install'));
-      console.log(chalk.yellow('3. npm run dev'));
+      spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
 
-    } catch (error) {
-      console.error(chalk.red('Error creating project:'), error);
+      console.log(chalk.yellow('\nNext steps:'));
+      console.log(chalk.blue('1. cd ' + projectName));
+      console.log(chalk.cyan('2. npm i') + chalk.gray('  # Install dependencies'));
+      console.log(chalk.cyan('3. npm run build') + chalk.gray('  # Build the project'));
+      console.log(chalk.cyan('4. npm start') + chalk.gray('  # Launch the project\n'));
+
+    } catch (err) {
+      console.error(chalk.red('Error creating project:'), err);
       process.exit(1);
     }
   });

@@ -8,7 +8,6 @@ import { promises as fs } from 'fs';
 export const createDir = async (dirPath: string): Promise<void> => {
   try {
     await fs.mkdir(dirPath, { recursive: true });
-    console.log(`Directory created or already exists: ${dirPath}`);
   } catch (error) {
     console.error(`Error creating directory at ${dirPath}: ${(error as Error).message}`);
     throw error;
