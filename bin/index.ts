@@ -40,7 +40,8 @@ program
        * * This function is used to copy the boilerplate to the project path
        * * by using the Copy whole project directory
        */
-      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
+      // await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
+      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectoryByModule(); // ! working
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
 
