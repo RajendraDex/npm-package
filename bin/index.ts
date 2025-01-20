@@ -28,7 +28,8 @@ program
       const spinner = ora('Creating project...\n').start();
       const projectPath = path.join(process.cwd(), projectName);
 
-      const boilerplatePath = path.join(process.cwd(), 'boilerplate');
+      // const boilerplatePath = path.join(process.cwd(), 'boilerplate');
+      const boilerplatePath = 'https://github.com/RajendraDex/npm-package/tree/master/boilerplate';
 
       /**
        * * This function is used to create the project with the boilerplate
