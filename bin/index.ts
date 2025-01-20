@@ -29,6 +29,7 @@ program
       const projectPath = path.join(process.cwd(), projectName);
 
       const boilerplatePath = path.join(process.cwd(), 'bin/boilerplate');
+      console.log("🚀 -------- file: index.ts:32 -------- .action -------- boilerplatePath:", boilerplatePath);
       // const boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
 
       /**
