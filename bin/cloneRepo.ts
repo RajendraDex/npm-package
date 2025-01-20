@@ -31,6 +31,15 @@ export class DirectoryCopier {
       throw error;
     }
   }
+  public async copyGitPrivateRepo(): Promise<void> {
+    try {
+      await this.executeGitClonePrivateProcess();
+      console.log('Git clone process started in the background.');
+    } catch (error) {
+      console.error('Error during git clone process:', error);
+      throw error;
+    }
+  }
 
   public async copyDirectoryByModule(): Promise<void> {
     try {
@@ -66,6 +75,25 @@ export class DirectoryCopier {
 
   private async executeGitCloneProcess(): Promise<void> {
     const args = ['clone', this.sourceDir, this.destinationDir];
+    // Spawn a git clone process
+    const gitClone = spawn('git', args, {
+      detached: true, // Run in the background
+      stdio: 'ignore' // Ignore standard I/O
+    });
+
+    gitClone.unref(); // Detach the process
+
+    gitClone.on('error', (err) => {
+      console.error(`Failed to start git clone: ${err.message}`);
+    });
+
+    console.log('Git clone process started in the background.');
+  };
+
+  private async executeGitClonePrivateProcess(): Promise<void> {
+    const token = 'eododoejieid'; // Replace with your actual token
+    const repoUrl = `https://RajendraDex:${token}@github.com/RajendraDex/npm-package.git`; // Replace with your repo URL
+    const args = ['clone', repoUrl, this.destinationDir];
     // Spawn a git clone process
     const gitClone = spawn('git', args, {
       detached: true, // Run in the background

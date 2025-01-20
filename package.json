@@ -1,6 +1,6 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.08",
+  "version": "1.0.09",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "tsc",

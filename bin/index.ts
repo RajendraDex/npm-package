@@ -28,8 +28,8 @@ program
       const spinner = ora('Creating project...\n').start();
       const projectPath = path.join(process.cwd(), projectName);
 
-      // const boilerplatePath = path.join(process.cwd(), 'boilerplate');
-      const boilerplatePath = 'https://github.com/RajendraDex/npm-package/tree/master/boilerplate';
+      const boilerplatePath = path.join(process.cwd(), 'bin/boilerplate');
+      // const boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
 
       /**
        * * This function is used to create the project with the boilerplate
@@ -41,8 +41,9 @@ program
        * * This function is used to copy the boilerplate to the project path
        * * by using the Copy whole project directory
        */
-      // await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
-      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectoryByModule(); // ! working
+      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
+      // await new DirectoryCopier(boilerplatePath, projectPath).copyDirectoryByModule(); // ! working
+      // await new DirectoryCopier(boilerplatePath, projectPath).copyGitRepo(); // ! working
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
 
