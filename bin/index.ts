@@ -30,8 +30,6 @@ program
 
       const boilerplatePath = path.join(process.cwd().split('bin')[0], 'node_modules/rajendra-npm-package/boilerplate');
       console.log("🚀 -------- file: index.ts:32 -------- .action -------- boilerplatePath:", boilerplatePath);
-      // const boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
-
       /**
        * * This function is used to create the project with the boilerplate
        * * by file and folder creation with fs module(write file and folder)
@@ -43,8 +41,6 @@ program
        * * by using the Copy whole project directory
        */
       await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
-      // await new DirectoryCopier(boilerplatePath, projectPath).copyDirectoryByModule(); // ! working
-      // await new DirectoryCopier(boilerplatePath, projectPath).copyGitRepo(); // ! working
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
 
