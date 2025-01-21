@@ -80,6 +80,18 @@ export const questions = [
     },
     filter: (input: string) => input.toLowerCase(), // Convert to lowercase for consistency
   },
+  {
+    type: 'input',
+    name: 'token',
+    message: 'Enter your github token:',
+    default: '',
+    when: (answers: any) => answers.copyFrom === 'private-repo',
+    validate: (input: string) => {
+      if (!input) return 'GitHub token cannot be empty.';
+      return true;
+    },
+    filter: (input: string) => input.trim(),
+  },
   // {
   //   type: 'confirm',
   //   name: 'useDocker',

@@ -91,9 +91,8 @@ export class DirectoryCopier {
   };
 
   private async executeGitClonePrivateProcess(): Promise<void> {
-    const token = 'eododoejieid'; // Replace with your actual token
-    const repoUrl = `https://RajendraDex:${token}@github.com/RajendraDex/npm-package.git`; // Replace with your repo URL
-    const args = ['clone', repoUrl, this.destinationDir];
+
+    const args = ['clone', this.sourceDir, this.destinationDir];
     // Spawn a git clone process
     const gitClone = spawn('git', args, {
       detached: true, // Run in the background

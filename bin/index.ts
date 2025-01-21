@@ -28,13 +28,10 @@ program
 
       const projectName = answers.projectName;
       const copyBoilerplateFrom: copyType = answers.copyFrom;
-      console.log("🚀 -------- file: index.ts:79 -------- .action -------- copyBoilerplateFrom:", copyBoilerplateFrom);
+      const token = answers.token;
       const spinner = ora('Creating project...\n').start();
       const projectPath = path.join(process.cwd(), projectName);
       let boilerplatePath: string;
-
-      // const boilerplatePath = path.resolve(process.cwd(), '../node_modules/rajendra-npm-package/boilerplate');
-      // console.log("🚀 -------- file: index.ts:32 -------- .action -------- boilerplatePath:", boilerplatePath);
 
       /**
        * * This function is used to create the project with the boilerplate
@@ -45,12 +42,16 @@ program
 
       switch (copyBoilerplateFrom) {
         case 'public-repo':
-          boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
+          boilerplatePath = 'https://github.com/RajendraDex/multi-tenancy-boilerplate.git';
           await new DirectoryCopier(boilerplatePath, projectPath).copyPublicRepo();
           break;
         case 'private-repo':
-          boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
-          await new DirectoryCopier(boilerplatePath, projectPath).copyGitPrivateRepo();
+          if (token) {
+            boilerplatePath = `https://RajendraDex:${token}@github.com/RajendraDex/multi-tenancy-boilerplate.git`;
+            await new DirectoryCopier(boilerplatePath, projectPath).copyGitPrivateRepo();
+          } else {
+            console.log('Token is required for private repository');
+          }
           break;
         case 'copy-directory':
           boilerplatePath = path.resolve(process.cwd(), '../node_modules/rajendra-npm-package/boilerplate');
@@ -61,7 +62,11 @@ program
           await main(answers);
           break;
         default:
-          throw new Error('Invalid boilerplate type');
+          console.log('Please select a valid boilerplate type. The options are:');
+          console.log(`- public-repo`);
+          console.log(`- private-repo`);
+          console.log(`- copy-directory`);
+          console.log(`- write-file`);
       };
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
