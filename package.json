@@ -1,11 +1,12 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.12",
+  "version": "1.0.13",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "tsc",
     "start": "node dist/bin/index.js create",
     "bin": "node dist/bin/index.js create",
+    "bin:create": "node dist/bin/cmd/create-boilerplate.js --no --app=your-app",
     "dev": "npm run build && npm run start",
     "clean": "rm -rf dist",
     "lint": "eslint .",
@@ -14,7 +15,8 @@
     "prepare": "npm run build"
   },
   "bin": {
-    "rajendra-npm-package": "dist/bin/index.js"
+    "rajendra-npm-package": "dist/bin/index.js",
+    "rajendra-npm-package:create": "dist/bin/cmd/create-boilerplate.js"
   },
   "_moduleAliases": {
     "@/*": "dist/src/*",

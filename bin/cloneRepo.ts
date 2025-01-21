@@ -22,15 +22,15 @@ export class DirectoryCopier {
     }
   }
 
-  // public async copyGitRepo(): Promise<void> {
-  //   try {
-  //     await this.executeGitCloneProcess();
-  //     console.log('Git clone process started in the background.');
-  //   } catch (error) {
-  //     console.error('Error during git clone process:', error);
-  //     throw error;
-  //   }
-  // }
+  public async copyPublicRepo(): Promise<void> {
+    try {
+      await this.executeGitCloneProcess();
+      console.log('Git clone process started in the background.');
+    } catch (error) {
+      console.error('Error during git clone process:', error);
+      throw error;
+    }
+  }
   public async copyGitPrivateRepo(): Promise<void> {
     try {
       await this.executeGitClonePrivateProcess();

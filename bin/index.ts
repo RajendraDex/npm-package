@@ -7,9 +7,11 @@ import chalk from 'chalk';
 import ora from 'ora';
 import path from 'path';
 import { questions } from '../generator/prompt/index';
-// import { main } from '../generator/index';
+import { main } from '../generator/index';
 const program = new Command();
 import { DirectoryCopier } from './cloneRepo';
+
+type copyType = 'public-repo' | 'private-repo' | 'copy-directory' | 'write-file';
 
 program
   .name('create-project')
@@ -25,22 +27,42 @@ program
       const answers = await inquirer.prompt(questions as any);
 
       const projectName = answers.projectName;
+      const copyBoilerplateFrom: copyType = answers.copyFrom;
+      console.log("🚀 -------- file: index.ts:79 -------- .action -------- copyBoilerplateFrom:", copyBoilerplateFrom);
       const spinner = ora('Creating project...\n').start();
       const projectPath = path.join(process.cwd(), projectName);
+      let boilerplatePath: string;
 
-      const boilerplatePath = path.join(process.cwd().split('bin')[0], 'node_modules/rajendra-npm-package/boilerplate');
-      console.log("🚀 -------- file: index.ts:32 -------- .action -------- boilerplatePath:", boilerplatePath);
+      // const boilerplatePath = path.resolve(process.cwd(), '../node_modules/rajendra-npm-package/boilerplate');
+      // console.log("🚀 -------- file: index.ts:32 -------- .action -------- boilerplatePath:", boilerplatePath);
+
       /**
        * * This function is used to create the project with the boilerplate
        * * by file and folder creation with fs module(write file and folder)
-       */
-      // await main(answers); // ! working
-
-      /**
        * * This function is used to copy the boilerplate to the project path
        * * by using the Copy whole project directory
        */
-      await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory(); // ! working
+
+      switch (copyBoilerplateFrom) {
+        case 'public-repo':
+          boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
+          await new DirectoryCopier(boilerplatePath, projectPath).copyPublicRepo();
+          break;
+        case 'private-repo':
+          boilerplatePath = 'https://github.com/RajendraDex/npm-package.git';
+          await new DirectoryCopier(boilerplatePath, projectPath).copyGitPrivateRepo();
+          break;
+        case 'copy-directory':
+          boilerplatePath = path.resolve(process.cwd(), '../node_modules/rajendra-npm-package/boilerplate');
+          await new DirectoryCopier(boilerplatePath, projectPath).copyDirectory();
+          break;
+        case 'write-file':
+          boilerplatePath = path.join(process.cwd(), 'boilerplate');
+          await main(answers);
+          break;
+        default:
+          throw new Error('Invalid boilerplate type');
+      };
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));
 
