@@ -120,14 +120,14 @@ export class NodeJSStarterKit {
 		const source = this.makePath(this.__dirname, ".")
 
 		// ! This is woking fine only if the project is in the root directory
-		// const des = this.makePath(this.__dirname, "../")
-		// const dest1 = this.paramOr(args, "destination", des).trim()
-		// const destination = this.makePath(dest1, this.projectName)
+		const des = this.makePath(this.__dirname, "../")
+		const dest1 = this.paramOr(args, "destination", des).trim()
+		const destination = this.makePath(dest1, this.projectName)
 
 		// ! This is woking fine only if the project is in the root directory
-		const dest = this.paramOr(args, "destination", process.cwd()).trim()
+		// const dest = this.paramOr(args, "destination", process.cwd()).trim()
+		// const destination = this.makePath(dest, this.projectName)
 		const app = this.paramOr(args, "name", this.projectName).trim()
-		const destination = this.makePath(dest, this.projectName)
 
 		//* Check if destination is a subdirectory of source
 		if (destination.startsWith(source)) {
