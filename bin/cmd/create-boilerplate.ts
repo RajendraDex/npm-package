@@ -1,6 +1,11 @@
-import "module-alias/register"
+#!/usr/bin/env node
+
+import "module-alias/register.js";
 import FsExt from "fs-extra"
 import Path, { dirname } from "path"
+import { fileURLToPath } from 'url'
+
+
 
 
 interface PackageJson {
@@ -69,15 +74,19 @@ export class NodeJSStarterKit {
 	private readonly DepsToIgnore: string[]
 	private readonly Templates: { file: string; copyTo: string }[]
 	private readonly PkgFieldsToKeep: string[]
+	private readonly projectName: string
+	private readonly projectPath: string
 
-	constructor(private readonly projectName: string, private readonly projectPath: string) {
-		this.__dirname = Path.resolve()
-		this.FilesToIgnore = FilesToIgnore;
+
+	constructor() {
+		// this.__dirname = Path.resolve()
+		this.__dirname = dirname(fileURLToPath(import.meta.url))
+		this.FilesToIgnore = [...FilesToIgnore, 'test-app'];
 		this.DepsToIgnore = DepsToIgnore
 		this.Templates = Templates;
 		this.PkgFieldsToKeep = PkgFieldsToKeep;
-		this.projectName = projectName;
-		this.projectPath = projectPath;
+		this.projectName = 'test-app';
+		this.projectPath = 'test-app';
 	}
 
 	private paramOr(map: Map<string, string>, arg: string, def: string): string {
@@ -95,7 +104,9 @@ export class NodeJSStarterKit {
 	private async main(): Promise<void> {
 		console.log("NodeJS Starter Kit - Bootstrapping New Project")
 
+		console.log("🚀 -------- file: create-boilerplate.ts:102 -------- NodeJSStarterKit -------- main -------- process.argv:", process.argv);
 		const argv = process.argv.slice(2)
+		console.log("🚀 -------- file: create-boilerplate.ts:103 -------- NodeJSStarterKit -------- main -------- argv:", argv);
 		const args = new Map<string, string>()
 
 		for (let i = 0; i < argv.length; i++) {
@@ -117,22 +128,23 @@ export class NodeJSStarterKit {
 			}
 		}
 
-		const source = this.makePath(this.__dirname, ".")
+		const source = this.makePath(this.__dirname, "../../..")
+		// const source = this.makePath(`${this.__dirname}/dist/bin`, "../")
 
 		// ! This is woking fine only if the project is in the root directory
-		const des = this.makePath(this.__dirname, "../")
-		const dest1 = this.paramOr(args, "destination", des).trim()
-		const destination = this.makePath(dest1, this.projectName)
+		// const des = this.makePath(this.__dirname, "../")
+		// const dest1 = this.paramOr(args, "destination", des).trim()
+		// const destination = this.makePath(dest1, this.projectName)
 
 		// ! This is woking fine only if the project is in the root directory
-		// const dest = this.paramOr(args, "destination", process.cwd()).trim()
-		// const destination = this.makePath(dest, this.projectName)
+		const dest = this.paramOr(args, "destination", process.cwd()).trim()
 		const app = this.paramOr(args, "name", this.projectName).trim()
+		const destination = this.makePath(dest, app)
 
 		//* Check if destination is a subdirectory of source
-		if (destination.startsWith(source)) {
-			throw new Error(`Cannot copy from '${source}' to a subdirectory of itself: '${destination}'`);
-		}
+		// if (destination.startsWith(source)) {
+		// 	throw new Error(`Cannot copy from '${source}' to a subdirectory of itself: '${destination}'`);
+		// }
 
 		console.log(`
 			Summary:
@@ -150,11 +162,11 @@ export class NodeJSStarterKit {
 		console.log("Copying Templates ...")
 
 		for (const x of this.Templates) {
-			// FsExt.copySync(this.makePath(source, "templates", x.file), this.makePath(destination, x.copyTo))
+			FsExt.copySync(this.makePath(source, "templates", x.file), this.makePath(destination, x.copyTo))
 		}
 
 		console.log("Preparing package.json ...")
-
+		// const packageJsonPath = this.makePath(this.__dirname, "../..")
 		const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, "package.json"))
 		const newPkg: PackageJson = {
 			name: app,
@@ -190,3 +202,10 @@ export class NodeJSStarterKit {
 	}
 }
 
+
+const starterKit = new NodeJSStarterKit();
+starterKit.run().then(() => {
+	console.log("🎉👍🔥🎆🎇Done!")
+}).catch((err) => {
+	console.log(err)
+})

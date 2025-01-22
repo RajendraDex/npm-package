@@ -1,12 +1,13 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "npm run clean && tsc",
     "start": "node dist/bin/index.js create",
     "bin": "node dist/bin/index.js create",
     "bin:create": "node dist/bin/cmd/create-boilerplate.js --no --app=your-app",
+    "bin:cli": "node cmd/create-boilerplate/index.js",
     "dev": "npm run build && npm run start",
     "clean": "rm -rf dist",
     "lint": "eslint .",
@@ -15,7 +16,9 @@
     "prepare": "npm run build"
   },
   "bin": {
-    "entity-form-crafter": "dist/bin/index.js"
+    "entity-form-crafter": "dist/bin/index.js",
+    "entity-form-crafter:create": "dist/bin/cmd/create-boilerplate.js",
+    "entity-form-crafter:cli": "cmd/create-boilerplate/index.js"
   },
   "_moduleAliases": {
     "@/*": "dist/src/*",

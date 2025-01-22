@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
-import 'module-alias/register';
+// import 'module-alias/register';
+import "module-alias/register.js";
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
@@ -64,10 +65,11 @@ program
           await main(answers);
           break;
         case 'create-boilerplate':
-          // const boilerplate = new CreateBoilerplate(projectName, projectPath);
-          // await boilerplate.createBoilerplate();
-          const starterKit = new NodeJSStarterKit(projectName, projectPath);
-          await starterKit.run();
+          const boilerplate = new CreateBoilerplate(projectName, projectPath);
+          await boilerplate.createBoilerplate();
+          // ! Note: call directly from the package
+          // const starterKit = new NodeJSStarterKit(projectName, projectPath);
+          // await starterKit.run();
           break;
         default:
           console.log('Please select a valid boilerplate type. The options are:');
