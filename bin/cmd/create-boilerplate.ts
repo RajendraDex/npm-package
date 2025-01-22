@@ -1,11 +1,9 @@
 #!/usr/bin/env node
 
-import "module-alias/register.js";
+import "module-alias/register";
 import FsExt from "fs-extra"
 import Path, { dirname } from "path"
 import { fileURLToPath } from 'url'
-
-
 
 
 interface PackageJson {
@@ -14,7 +12,9 @@ interface PackageJson {
 	dependencies?: { [key: string]: string }
 	devDependencies?: { [key: string]: string }
 	scripts?: { [key: string]: string }
+	_moduleAliases?: { [key: string]: string }
 }
+
 const Templates = [
 	{ file: "ci.yml", copyTo: ".github/workflows/ci.yml" },
 	{ file: "README.md", copyTo: "README.md" },
@@ -64,7 +64,7 @@ const FilesToIgnore = [
 	"example"
 ];
 
-const PkgFieldsToKeep = ["type", "main", "types", "scripts", "dependencies", "devDependencies"]
+const PkgFieldsToKeep = ["type", "main", "types", "_moduleAliases", "scripts", "dependencies", "devDependencies"]
 
 const DepsToIgnore = ["fs-extra", "@types/fs-extra", "standard-release"]
 
@@ -79,8 +79,11 @@ export class NodeJSStarterKit {
 
 
 	constructor() {
-		// this.__dirname = Path.resolve()
-		this.__dirname = dirname(fileURLToPath(import.meta.url))
+		// this.__dirname = dirname(Path.resolve())
+		// this.__dirname = Path.resolve(__dirname);
+		this.__dirname = dirname(__filename);
+
+		// this.__dirname = dirname(fileURLToPath(import.meta.url))
 		this.FilesToIgnore = FilesToIgnore;
 		this.DepsToIgnore = DepsToIgnore
 		this.Templates = Templates;
@@ -161,7 +164,18 @@ export class NodeJSStarterKit {
 
 		for (const field of this.PkgFieldsToKeep) {
 			if (typeof pkg[field] !== "undefined") {
-				newPkg[field] = pkg[field]
+				if (field === "scripts") {
+					newPkg[field] = pkg[field]
+				} else {
+					newPkg[field] = {
+						"build": "npm run clean && tsc",
+						"start": "node dist/app.bootstrap",
+						"dev": "npm run build && npm run start",
+						"clean": "rm -rf dist",
+						"lint": "eslint .",
+						"format": "prettier --write ."
+					}
+				}
 			}
 		}
 

@@ -1,10 +1,10 @@
 {
   "name": "rajendra-npm-package",
   "version": "1.0.20",
-  "main": "dist/bin/index.js",
+  "main": "dist/src/api/app.bootstrap.js",
   "scripts": {
     "build": "npm run clean && tsc",
-    "start": "node dist/bin/index.js create",
+    "start": "node dist/src/api/app.bootstrap",
     "bin": "node dist/bin/index.js create",
     "bin:create": "node dist/bin/cmd/create-boilerplate.js --no --app=your-app",
     "bin:cli": "node cmd/create-boilerplate/index.js",
