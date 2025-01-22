@@ -150,7 +150,7 @@ export class NodeJSStarterKit {
 		console.log("Copying Templates ...")
 
 		for (const x of this.Templates) {
-			FsExt.copySync(this.makePath(source, "templates", x.file), this.makePath(destination, x.copyTo))
+			// FsExt.copySync(this.makePath(source, "templates", x.file), this.makePath(destination, x.copyTo))
 		}
 
 		console.log("Preparing package.json ...")
