@@ -5,7 +5,6 @@ import Path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
-console.log("🚀 -------- file: index.js:8 -------- __dirname:", __dirname);
 
 const paramOr = (map, arg, def) => map.get(arg) || def
 const makePath = (...p) => Path.join(...p)
@@ -46,6 +45,13 @@ const FilesToIgnore = [
 	'package-lock.json',
 	'yarn.lock',
 	'tsconfig.build.tsbuildinfo',
+
+	// ! implemeted
+	"boilerplate",
+	"generator",
+	"bin",
+	"dist",
+	"example"
 ]
 
 const DepsToIgnore = ['fs-extra', '@types/fs-extra', 'standard-release']

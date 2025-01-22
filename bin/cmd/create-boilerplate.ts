@@ -81,7 +81,7 @@ export class NodeJSStarterKit {
 	constructor() {
 		// this.__dirname = Path.resolve()
 		this.__dirname = dirname(fileURLToPath(import.meta.url))
-		this.FilesToIgnore = [...FilesToIgnore, 'test-app'];
+		this.FilesToIgnore = FilesToIgnore;
 		this.DepsToIgnore = DepsToIgnore
 		this.Templates = Templates;
 		this.PkgFieldsToKeep = PkgFieldsToKeep;
@@ -104,9 +104,7 @@ export class NodeJSStarterKit {
 	private async main(): Promise<void> {
 		console.log("NodeJS Starter Kit - Bootstrapping New Project")
 
-		console.log("🚀 -------- file: create-boilerplate.ts:102 -------- NodeJSStarterKit -------- main -------- process.argv:", process.argv);
 		const argv = process.argv.slice(2)
-		console.log("🚀 -------- file: create-boilerplate.ts:103 -------- NodeJSStarterKit -------- main -------- argv:", argv);
 		const args = new Map<string, string>()
 
 		for (let i = 0; i < argv.length; i++) {
@@ -129,22 +127,11 @@ export class NodeJSStarterKit {
 		}
 
 		const source = this.makePath(this.__dirname, "../../..")
-		// const source = this.makePath(`${this.__dirname}/dist/bin`, "../")
-
-		// ! This is woking fine only if the project is in the root directory
-		// const des = this.makePath(this.__dirname, "../")
-		// const dest1 = this.paramOr(args, "destination", des).trim()
-		// const destination = this.makePath(dest1, this.projectName)
 
 		// ! This is woking fine only if the project is in the root directory
 		const dest = this.paramOr(args, "destination", process.cwd()).trim()
 		const app = this.paramOr(args, "name", this.projectName).trim()
 		const destination = this.makePath(dest, app)
-
-		//* Check if destination is a subdirectory of source
-		// if (destination.startsWith(source)) {
-		// 	throw new Error(`Cannot copy from '${source}' to a subdirectory of itself: '${destination}'`);
-		// }
 
 		console.log(`
 			Summary:
@@ -166,7 +153,7 @@ export class NodeJSStarterKit {
 		}
 
 		console.log("Preparing package.json ...")
-		// const packageJsonPath = this.makePath(this.__dirname, "../..")
+
 		const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, "package.json"))
 		const newPkg: PackageJson = {
 			name: app,

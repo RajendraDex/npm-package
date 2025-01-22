@@ -1,6 +1,6 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.19",
+  "version": "1.0.20",
   "main": "dist/bin/index.js",
   "scripts": {
     "build": "npm run clean && tsc",
@@ -17,8 +17,8 @@
   },
   "bin": {
     "entity-form-crafter": "dist/bin/index.js",
-    "entity-form-crafter-create": "dist/bin/cmd/create-boilerplate.js",
-    "rajendra-npm-package": "cmd/create-boilerplate/index.js"
+    "rajendra-npm-package": "dist/bin/cmd/create-boilerplate.js",
+    "rajendra-npm-package-cli": "cmd/create-boilerplate/index.js"
   },
   "_moduleAliases": {
     "@/*": "dist/src/*",
