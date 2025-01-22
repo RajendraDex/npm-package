@@ -73,6 +73,7 @@ export const questions = [
       { name: 'Private Repo', value: 'private-repo' },
       { name: 'Copy Directory', value: 'copy-directory' },
       { name: 'Write File', value: 'write-file' },
+      { name: 'Create Boilerplate', value: 'create-boilerplate' },
     ],
     validate: (input: string) => {
       if (!input) return 'You must select a boilerplate source.';

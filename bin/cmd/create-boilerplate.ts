@@ -1,21 +1,24 @@
-#!/usr/bin/env node
-
+import "module-alias/register"
 import FsExt from "fs-extra"
 import Path, { dirname } from "path"
-import { fileURLToPath } from "url"
-
-// const __dirname = dirname(fileURLToPath(import.meta.url)) // TODO: need to implement this
-const __dirname = Path.resolve()
 
 
-const paramOr = (map: Map<string, string>, arg: string, def: string): string => map.get(arg) || def
-const makePath = (...p: string[]): string => Path.join(...p)
-const ignoreContent =
-	(...values: string[]) =>
-		(source: string): boolean =>
-			!values.some((x) => source === x)
+interface PackageJson {
+	[key: string]: any
+	name: string
+	dependencies?: { [key: string]: string }
+	devDependencies?: { [key: string]: string }
+	scripts?: { [key: string]: string }
+}
+const Templates = [
+	{ file: "ci.yml", copyTo: ".github/workflows/ci.yml" },
+	{ file: "README.md", copyTo: "README.md" },
+	{ file: ".gitignore.husky", copyTo: ".husky/.gitignore" },
+	{ file: ".gitignore.root", copyTo: ".gitignore" },
+	{ file: ".dockerignore.root", copyTo: ".dockerignore" },
+];
 
-const FilesToIgnore: string[] = [
+const FilesToIgnore = [
 	".git",
 	".idea",
 	".vscode",
@@ -47,113 +50,143 @@ const FilesToIgnore: string[] = [
 	"package-lock.json",
 	"yarn.lock",
 	"tsconfig.build.tsbuildinfo",
-]
 
-const DepsToIgnore: string[] = ["fs-extra", "@types/fs-extra", "standard-release"]
+	// ! implemeted
+	"boilerplate",
+	"generator",
+	"bin",
+	"dist",
+	"example"
+];
 
-interface Template {
-	file: string
-	copyTo: string
-}
+const PkgFieldsToKeep = ["type", "main", "types", "scripts", "dependencies", "devDependencies"]
 
-const Templates: Template[] = [
-	// { file: "ci.yml", copyTo: ".github/workflows/ci.yml" },
-	// { file: "README.md", copyTo: "README.md" },
-	// { file: ".gitignore.husky", copyTo: ".husky/.gitignore" },
-	// { file: ".gitignore.root", copyTo: ".gitignore" },
-	// { file: ".dockerignore.root", copyTo: ".dockerignore" },
-]
+const DepsToIgnore = ["fs-extra", "@types/fs-extra", "standard-release"]
 
-const PkgFieldsToKeep: string[] = ["type", "main", "types", "scripts", "dependencies", "devDependencies"]
+export class NodeJSStarterKit {
+	private readonly __dirname: string
+	private readonly FilesToIgnore: string[]
+	private readonly DepsToIgnore: string[]
+	private readonly Templates: { file: string; copyTo: string }[]
+	private readonly PkgFieldsToKeep: string[]
 
-interface PackageJson {
-	[key: string]: any
-	name: string
-	dependencies?: { [key: string]: string }
-	devDependencies?: { [key: string]: string }
-	scripts?: { [key: string]: string }
-}
+	constructor(private readonly projectName: string, private readonly projectPath: string) {
+		this.__dirname = Path.resolve()
+		this.FilesToIgnore = FilesToIgnore;
+		this.DepsToIgnore = DepsToIgnore
+		this.Templates = Templates;
+		this.PkgFieldsToKeep = PkgFieldsToKeep;
+		this.projectName = projectName;
+		this.projectPath = projectPath;
+	}
 
-async function main(): Promise<void> {
-	console.log("NodeJS Starter Kit - Bootstrapping New Project")
+	private paramOr(map: Map<string, string>, arg: string, def: string): string {
+		return map.get(arg) || def
+	}
 
-	console.log("🚀 -------- file: create-boilerplate.ts:80 -------- main -------- process.argv:", process.argv);
-	const argv = process.argv.slice(2)
-	const args = new Map<string, string>()
+	private makePath(...p: string[]): string {
+		return Path.join(...p)
+	}
 
-	for (let i = 0; i < argv.length; i++) {
-		const arg = argv[i]
+	private ignoreContent(...values: string[]) {
+		return (source: string): boolean => !values.some((x) => source === x)
+	}
 
-		if (/^--.+=/.test(arg)) {
-			const match = arg.match(/^--([^=]+)=([\s\S]*)$/)
-			if (match) {
-				const [, key, value] = match
-				args.set(key, value)
+	private async main(): Promise<void> {
+		console.log("NodeJS Starter Kit - Bootstrapping New Project")
+
+		const argv = process.argv.slice(2)
+		const args = new Map<string, string>()
+
+		for (let i = 0; i < argv.length; i++) {
+			const arg = argv[i]
+
+			if (/^--.+=/.test(arg)) {
+				const match = arg.match(/^--([^=]+)=([\s\S]*)$/)
+				if (match) {
+					const [, key, value] = match
+					args.set(key, value)
+				}
+			} else if (/^--.+/.test(arg)) {
+				const match = arg.match(/^--(.+)/)
+				if (match) {
+					const [, key] = match
+					const next = argv[i + 1]
+					args.set(key, next)
+				}
 			}
-		} else if (/^--.+/.test(arg)) {
-			const match = arg.match(/^--(.+)/)
-			if (match) {
-				const [, key] = match
-				const next = argv[i + 1]
-				args.set(key, next)
+		}
+
+		const source = this.makePath(this.__dirname, ".")
+
+		// ! This is woking fine only if the project is in the root directory
+		// const des = this.makePath(this.__dirname, "../")
+		// const dest1 = this.paramOr(args, "destination", des).trim()
+		// const destination = this.makePath(dest1, this.projectName)
+
+		// ! This is woking fine only if the project is in the root directory
+		const dest = this.paramOr(args, "destination", process.cwd()).trim()
+		const app = this.paramOr(args, "name", this.projectName).trim()
+		const destination = this.makePath(dest, this.projectName)
+
+		//* Check if destination is a subdirectory of source
+		if (destination.startsWith(source)) {
+			throw new Error(`Cannot copy from '${source}' to a subdirectory of itself: '${destination}'`);
+		}
+
+		console.log(`
+			Summary:
+			- Destination: ${destination}
+			- Source: ${source}
+			- App: ${app}
+		`)
+
+		console.log("Copying Project Files ...")
+
+		FsExt.copySync(source, destination, {
+			filter: this.ignoreContent(...this.FilesToIgnore.map((x) => this.makePath(source, x))),
+		})
+
+		console.log("Copying Templates ...")
+
+		for (const x of this.Templates) {
+			FsExt.copySync(this.makePath(source, "templates", x.file), this.makePath(destination, x.copyTo))
+		}
+
+		console.log("Preparing package.json ...")
+
+		const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, "package.json"))
+		const newPkg: PackageJson = {
+			name: app,
+		}
+
+		for (const field of this.PkgFieldsToKeep) {
+			if (typeof pkg[field] !== "undefined") {
+				newPkg[field] = pkg[field]
 			}
 		}
-	}
 
-	// ... existing code ...
-	const source = makePath(__dirname, "../../..") // Updated to point to the root directory
-	// ... existing code ...
-	// const source = makePath(__dirname, "../..")
-	const dest = paramOr(args, "destination", process.cwd()).trim()
-	const app = paramOr(args, "name", "my-app").trim()
-	const destination = makePath(dest, app)
+		for (const dep of this.DepsToIgnore) {
+			if (newPkg.dependencies && newPkg.dependencies[dep]) {
+				delete newPkg.dependencies[dep]
+			}
 
-	console.log(`
-Summary:
-Destination: ${destination}
-App: ${app}
-`)
-
-	console.log("Copying Project Files ...")
-
-	FsExt.copySync(source, destination, { filter: ignoreContent(...FilesToIgnore.map((x) => makePath(source, x))) })
-
-	console.log("Copying Templates ...")
-
-	for (const x of Templates) {
-		FsExt.copySync(makePath(source, "templates", x.file), makePath(destination, x.copyTo))
-	}
-
-	console.log("Preparing package.json ...")
-
-	const pkg: PackageJson = FsExt.readJsonSync(makePath(source, "package.json"))
-	const newPkg: PackageJson = {
-		name: app,
-	}
-
-	for (const field of PkgFieldsToKeep) {
-		if (typeof pkg[field] !== "undefined") {
-			newPkg[field] = pkg[field]
-		}
-	}
-
-	for (const dep of DepsToIgnore) {
-		if (newPkg.dependencies && newPkg.dependencies[dep]) {
-			delete newPkg.dependencies[dep]
+			if (newPkg.devDependencies && newPkg.devDependencies[dep]) {
+				delete newPkg.devDependencies[dep]
+			}
 		}
 
-		if (newPkg.devDependencies && newPkg.devDependencies[dep]) {
-			delete newPkg.devDependencies[dep]
+		if (newPkg.scripts) {
+			delete newPkg.scripts.release
 		}
+
+		FsExt.writeJsonSync(this.makePath(destination, "package.json"), newPkg, { spaces: 2 })
+
+		console.log("\nDone!")
 	}
 
-	if (newPkg.scripts) {
-		delete newPkg.scripts.release
+	public async run(): Promise<void> {
+		await this.main()
 	}
-
-	FsExt.writeJsonSync(makePath(destination, "package.json"), newPkg, { spaces: 2 })
-
-	console.log("\nDone!")
 }
 
-main().catch(console.error)

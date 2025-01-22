@@ -10,8 +10,10 @@ import { questions } from '../generator/prompt/index';
 import { main } from '../generator/index';
 const program = new Command();
 import { DirectoryCopier } from './cloneRepo';
+import { CreateBoilerplate } from './copyPublish';
+import { NodeJSStarterKit } from './cmd/create-boilerplate';
 
-type copyType = 'public-repo' | 'private-repo' | 'copy-directory' | 'write-file';
+type copyType = 'public-repo' | 'private-repo' | 'copy-directory' | 'write-file' | 'create-boilerplate';
 
 program
   .name('create-project')
@@ -61,12 +63,19 @@ program
           boilerplatePath = path.join(process.cwd(), 'boilerplate');
           await main(answers);
           break;
+        case 'create-boilerplate':
+          // const boilerplate = new CreateBoilerplate(projectName, projectPath);
+          // await boilerplate.createBoilerplate();
+          const starterKit = new NodeJSStarterKit(projectName, projectPath);
+          await starterKit.run();
+          break;
         default:
           console.log('Please select a valid boilerplate type. The options are:');
           console.log(`- public-repo`);
           console.log(`- private-repo`);
           console.log(`- copy-directory`);
           console.log(`- write-file`);
+          console.log(`- create-boilerplate`);
       };
 
       spinner.succeed(chalk.green(`\nYour backend project "${chalk.bold(projectName)}" has been successfully created!\n`));

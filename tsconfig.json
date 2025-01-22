@@ -8,6 +8,7 @@
     "paths": {
       "@/*": ["src/*"],
       "@bin/*": ["bin/*"],
+      "@cmd/*": ["bin/cmd/*"],
       "@utils/*": ["generator/utils/*"],
       "@writers/*": ["generator/writers/*"],
       "@base/*": ["generator/base/*"],
