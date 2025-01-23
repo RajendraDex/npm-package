@@ -1,6 +1,6 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "main": "dist/src/app.js",
   "scripts": {
     "build": "npm run clean && tsc",
