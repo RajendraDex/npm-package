@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
-// import 'module-alias/register';
-import "module-alias/register.js";
+import 'module-alias/register';
 import { Command } from 'commander';
 import inquirer from 'inquirer';
 import chalk from 'chalk';
@@ -12,7 +11,8 @@ import { main } from '../generator/index';
 const program = new Command();
 import { DirectoryCopier } from './cloneRepo';
 import { CreateBoilerplate } from './copyPublish';
-import { NodeJSStarterKit } from './cmd/create-boilerplate';
+import { PackageJsonFileCreator } from './cmd/PackageJsonGenerator';
+import { EnvCreator } from './cmd/EnvFileCreator';
 
 type copyType = 'public-repo' | 'private-repo' | 'copy-directory' | 'write-file' | 'create-boilerplate';
 
@@ -28,6 +28,7 @@ program
   .action(async () => {
     try {
       const answers = await inquirer.prompt(questions as any);
+      console.log("🚀 -------- file: index.ts:30 -------- .action -------- answers:", answers);
 
       const projectName = answers.projectName;
       const copyBoilerplateFrom: copyType = answers.copyFrom;
@@ -67,9 +68,8 @@ program
         case 'create-boilerplate':
           const boilerplate = new CreateBoilerplate(projectName, projectPath);
           await boilerplate.createBoilerplate();
-          // ! Note: call directly from the package
-          // const starterKit = new NodeJSStarterKit(projectName, projectPath);
-          // await starterKit.run();
+          await PackageJsonFileCreator.init(projectName, answers.dbType, answers.ormType).generatePackageJson();
+          await EnvCreator.createEnvFile(answers, projectName);
           break;
         default:
           console.log('Please select a valid boilerplate type. The options are:');

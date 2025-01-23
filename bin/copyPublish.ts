@@ -8,12 +8,42 @@ export class CreateBoilerplate {
 	private __dirname: string;
 
 	private static FilesToIgnore: string[] = [
-		'.git', '.idea', '.vscode', '.github', '.husky/_', '.yarn', '.yarn/cache',
-		'.yarn/build-state.yml', '.yarn/install-state.gz', '.yarnrc.yml', '.versionrc.js',
-		'cmd', 'coverage', 'dist', 'docs', 'node_modules', 'scripts', 'templates',
-		'tools', '.codeclimate.yml', '.npmignore', '.env', 'CONTRIBUTING.md',
-		'CHANGELOG.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'README.md', 'package.json',
-		'package-lock.json', 'yarn.lock', 'tsconfig.build.tsbuildinfo',
+		'.git',
+		'.idea',
+		'.vscode',
+		'.github',
+		'.husky/_',
+		'.yarn',
+		'.yarn/cache',
+		'.yarn/build-state.yml',
+		'.yarn/install-state.gz',
+		'.yarnrc.yml',
+		'.versionrc.js',
+		'cmd',
+		'coverage',
+		'dist',
+		'docs',
+		'node_modules',
+		'scripts',
+		'templates',
+		'tools',
+		'.codeclimate.yml',
+		'.npmignore',
+		'.env',
+		'CONTRIBUTING.md',
+		'CHANGELOG.md',
+		'CODE_OF_CONDUCT.md',
+		'LICENSE', 'README.md',
+		'package.json',
+		'package-lock.json',
+		'yarn.lock',
+		'tsconfig.build.tsbuildinfo',
+		"boilerplate",
+		"generator",
+		"bin",
+		"dist",
+		"example",
+		"src-rajenddra"
 
 	];
 
@@ -30,7 +60,7 @@ export class CreateBoilerplate {
 		{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
 		{ file: "jest.config.root", copyTo: "jest.config.js" },
 		{ file: ".env.example.root", copyTo: ".env.example" },
-		{ file: "package.json.root", copyTo: "package.json" },
+		{ file: "package.json.root", copyTo: "package1.json" },
 
 	];
 
@@ -76,15 +106,19 @@ export class CreateBoilerplate {
 				if (key) args.set(key, next);
 			}
 		}
-		console.log("🚀 -------- file: copyPublish.ts:112 -------- CreateBoilerplate -------- createBoilerplate -------- this.__dirname:", this.__dirname);
 
 		const source = this.makePath(__dirname, '../..');
-		console.log("🚀 -------- file: copyPublish.ts:74 -------- CreateBoilerplate -------- createBoilerplate -------- source:", source);
+
 		const dest = this.paramOr(args, 'destination', process.cwd()).trim();
 		const app = this.paramOr(args, 'name', this.projectName).trim();
 		const destination = this.makePath(dest, app);
 
-		console.log(` Summary: Destination: ${destination} App: ${app} `);
+		console.log(`
+			Summary:
+			- Destination: ${destination}
+			- Source: ${source}
+			- App: ${app}
+		`)
 
 		console.log('Copying Project Files ...');
 		FsExt.copySync(source, destination, {
@@ -96,25 +130,25 @@ export class CreateBoilerplate {
 			FsExt.copySync(this.makePath(source, 'templates', x.file), this.makePath(destination, x.copyTo));
 		}
 
-		console.log('Preparing package.json ...');
-		const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, 'package.json'));
-		const newPkg: PackageJson = { name: app };
+		// console.log('Preparing package.json ...');
+		// const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, 'package.json'));
+		// const newPkg: PackageJson = { name: app };
 
-		for (const field of CreateBoilerplate.PkgFieldsToKeep) {
-			if (typeof pkg[field] !== 'undefined') {
-				newPkg[field] = pkg[field];
-			}
-		}
+		// for (const field of CreateBoilerplate.PkgFieldsToKeep) {
+		// 	if (typeof pkg[field] !== 'undefined') {
+		// 		newPkg[field] = pkg[field];
+		// 	}
+		// }
 
-		for (const dep of CreateBoilerplate.DepsToIgnore) {
-			if (newPkg.dependencies?.[dep]) delete newPkg.dependencies[dep];
-			if (newPkg.devDependencies?.[dep]) delete newPkg.devDependencies[dep];
-		}
+		// for (const dep of CreateBoilerplate.DepsToIgnore) {
+		// 	if (newPkg.dependencies?.[dep]) delete newPkg.dependencies[dep];
+		// 	if (newPkg.devDependencies?.[dep]) delete newPkg.devDependencies[dep];
+		// }
 
-		delete newPkg.scripts?.release;
+		// delete newPkg.scripts?.release;
 
-		FsExt.writeJsonSync(this.makePath(destination, 'package.json'), newPkg, { spaces: 2 });
+		// FsExt.writeJsonSync(this.makePath(destination, 'package.json'), newPkg, { spaces: 2 });
 
-		console.log('\nDone!');
+		console.log("\n🎉👍🔥🎆🎇Done!")
 	}
 }

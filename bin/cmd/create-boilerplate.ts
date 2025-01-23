@@ -83,7 +83,7 @@ export class NodeJSStarterKit {
 	private readonly projectPath: string
 
 
-	constructor() {
+	constructor(projectName?: string, projectPath?: string) {
 		// this.__dirname = dirname(Path.resolve())
 		// this.__dirname = Path.resolve(__dirname);
 		this.__dirname = dirname(__filename);
@@ -93,8 +93,8 @@ export class NodeJSStarterKit {
 		this.DepsToIgnore = DepsToIgnore
 		this.Templates = Templates;
 		this.PkgFieldsToKeep = PkgFieldsToKeep;
-		this.projectName = 'test-app';
-		this.projectPath = 'test-app';
+		this.projectName = projectName || 'test-app';
+		this.projectPath = projectPath || 'test-app';
 	}
 
 	private paramOr(map: Map<string, string>, arg: string, def: string): string {
@@ -196,8 +196,6 @@ export class NodeJSStarterKit {
 		// }
 
 		// FsExt.writeJsonSync(this.makePath(destination, "package.json"), newPkg, { spaces: 2 })
-
-		console.log("\nDone!")
 	}
 
 	public async run(): Promise<void> {
