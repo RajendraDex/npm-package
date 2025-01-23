@@ -5,11 +5,8 @@ import { Answers } from "./answer.interface"
 
 export class EnvFileCreator {
 	static instance: EnvFileCreator
-	private readonly baseDir: string
 
-	constructor() {
-		this.baseDir = path.resolve(__dirname, "../../../")
-	}
+	constructor() { }
 
 	static getInstance(): EnvFileCreator {
 		if (!EnvFileCreator.instance) {
@@ -18,12 +15,10 @@ export class EnvFileCreator {
 		return EnvFileCreator.instance
 	}
 
-	public async createEnvFile(answers: Answers, projectName: string): Promise<void> {
-		const projectFolderPath = path.join(this.baseDir, projectName?.trim()?.toLowerCase() || 'my-app')
-		// const projectFolderPath = path.resolve(__dirname, '../../../', projectName.trim().toLowerCase());
+	public async createEnvFile(answers: Answers, projectName: string, destination: string): Promise<void> {
 		try {
-			await this.createProjectDirectory(projectFolderPath)
-			await this.writeEnvFile(projectFolderPath, answers)
+			await this.createProjectDirectory(destination)
+			await this.writeEnvFile(destination, answers)
 		} catch (error) {
 			console.error("Error in createEnvFile:", error)
 		}

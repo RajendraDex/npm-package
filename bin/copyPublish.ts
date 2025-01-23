@@ -1,5 +1,8 @@
 import FsExt from 'fs-extra';
 import Path from 'path';
+import { PackageJsonFileCreator } from './cmd/PackageJsonGenerator';
+import { EnvCreator } from './cmd/EnvFileCreator';
+import { Answers } from './cmd/answer.interface';
 
 type Template = { file: string; copyTo: string };
 type PackageJson = Record<string, any>;
@@ -70,10 +73,16 @@ export class CreateBoilerplate {
 
 	private projectName: string;
 	private destination: string;
+	private answers: Answers;
+	private dbType: string;
+	private ormType: string;
 
-	constructor(projectName: string, destination: string) {
+	constructor(projectName: string, destination: string, answers: Answers) {
 		this.projectName = projectName;
 		this.destination = destination;
+		this.answers = answers;
+		this.dbType = answers.dbType as string;
+		this.ormType = answers.ormType as string;
 		this.__dirname = Path.resolve();
 	}
 
@@ -130,6 +139,7 @@ export class CreateBoilerplate {
 			FsExt.copySync(this.makePath(source, 'templates', x.file), this.makePath(destination, x.copyTo));
 		}
 
+		// TODO: This need to implement dynamically
 		// console.log('Preparing package.json ...');
 		// const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, 'package.json'));
 		// const newPkg: PackageJson = { name: app };
@@ -148,6 +158,8 @@ export class CreateBoilerplate {
 		// delete newPkg.scripts?.release;
 
 		// FsExt.writeJsonSync(this.makePath(destination, 'package.json'), newPkg, { spaces: 2 });
+		await PackageJsonFileCreator.init(app, this.dbType, this.ormType, destination).generatePackageJson();
+		await EnvCreator.createEnvFile(this.answers, app, destination);
 
 		console.log("\n🎉👍🔥🎆🎇Done!")
 	}

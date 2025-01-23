@@ -3,9 +3,10 @@ import { join } from "path"
 
 class PackageJsonGenerator {
 	static instance: PackageJsonGenerator
-	private projectDir!: string
+	private projectName!: string
 	private database!: string
 	private orm!: string
+	private destination!: string
 
 	constructor() { }
 
@@ -16,16 +17,17 @@ class PackageJsonGenerator {
 		return PackageJsonGenerator.instance
 	}
 
-	init(projectDir: string, database: string, orm: string): PackageJsonGenerator {
-		this.projectDir = projectDir
+	init(projectName: string, database: string, orm: string, destination: string): PackageJsonGenerator {
+		this.projectName = projectName
 		this.database = database
 		this.orm = orm
+		this.destination = destination;
 		return this;
 	}
 
 	public async generatePackageJson(): Promise<void> {
 		const packageJson = {
-			name: this.projectDir.split("/").pop(),
+			name: this.projectName,
 			version: "1.0.0",
 			main: "dist/src/app.bootstrap.js",
 			scripts: this.getScripts(),
@@ -37,7 +39,7 @@ class PackageJsonGenerator {
 			devDependencies: this.getDevDependencies(),
 		}
 
-		writeFileSync(join(this.projectDir, "package.json"), JSON.stringify(packageJson, null, 2))
+		writeFileSync(join(this.destination, "package.json"), JSON.stringify(packageJson, null, 2))
 	}
 
 	private getScripts(): Record<string, string> {

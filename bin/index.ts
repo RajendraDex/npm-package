@@ -11,8 +11,7 @@ import { main } from '../generator/index';
 const program = new Command();
 import { DirectoryCopier } from './cloneRepo';
 import { CreateBoilerplate } from './copyPublish';
-import { PackageJsonFileCreator } from './cmd/PackageJsonGenerator';
-import { EnvCreator } from './cmd/EnvFileCreator';
+import { Answers } from './cmd/answer.interface';
 
 type copyType = 'public-repo' | 'private-repo' | 'copy-directory' | 'write-file' | 'create-boilerplate';
 
@@ -27,12 +26,12 @@ program
   // .argument('[name]', 'Project name')
   .action(async () => {
     try {
-      const answers = await inquirer.prompt(questions as any);
+      const answers = await inquirer.prompt(questions as any) as Answers;
       console.log("🚀 -------- file: index.ts:30 -------- .action -------- answers:", answers);
 
-      const projectName = answers.projectName;
-      const copyBoilerplateFrom: copyType = answers.copyFrom;
-      const token = answers.token;
+      const projectName = answers.projectName as string;
+      const copyBoilerplateFrom = answers.copyFrom as copyType;
+      const token = answers.token as string;
       const spinner = ora('Creating project...\n').start();
       const projectPath = path.join(process.cwd(), projectName);
       let boilerplatePath: string;
@@ -66,10 +65,8 @@ program
           await main(answers);
           break;
         case 'create-boilerplate':
-          const boilerplate = new CreateBoilerplate(projectName, projectPath);
+          const boilerplate = new CreateBoilerplate(projectName, projectPath, answers);
           await boilerplate.createBoilerplate();
-          await PackageJsonFileCreator.init(projectName, answers.dbType, answers.ormType).generatePackageJson();
-          await EnvCreator.createEnvFile(answers, projectName);
           break;
         default:
           console.log('Please select a valid boilerplate type. The options are:');
