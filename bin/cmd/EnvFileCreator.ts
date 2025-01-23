@@ -1,5 +1,3 @@
-import fs from "fs"
-import path from "path"
 import { Answers } from "./answer.interface"
 
 
@@ -15,33 +13,9 @@ export class EnvFileCreator {
 		return EnvFileCreator.instance
 	}
 
-	public async createEnvFile(answers: Answers, projectName: string, destination: string): Promise<void> {
-		try {
-			await this.createProjectDirectory(destination)
-			await this.writeEnvFile(destination, answers)
-		} catch (error) {
-			console.error("Error in createEnvFile:", error)
-		}
-	}
-
-	private async createProjectDirectory(projectFolderPath: string): Promise<void> {
-		if (!fs.existsSync(projectFolderPath)) {
-			await fs.promises.mkdir(projectFolderPath, { recursive: true })
-		}
-	}
-
-	private async writeEnvFile(projectFolderPath: string, answers: Answers): Promise<void> {
-		const filePath = path.join(projectFolderPath, ".env");
-
-		if (!fs.existsSync(filePath)) {
-			const fileContent = this.generateEnvFileContent(answers)
-			try {
-				await fs.promises.writeFile(filePath, fileContent.trim())
-				console.log("Created .env file.")
-			} catch (error) {
-				console.error("Error writing .env file:", error)
-			}
-		}
+	public async createEnvFile(answers: Answers): Promise<string> {
+		const fileContent = this.generateEnvFileContent(answers)
+		return fileContent
 	}
 
 	private generateEnvFileContent(answers: Answers): string {

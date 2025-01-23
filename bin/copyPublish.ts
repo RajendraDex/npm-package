@@ -158,8 +158,18 @@ export class CreateBoilerplate {
 		// delete newPkg.scripts?.release;
 
 		// FsExt.writeJsonSync(this.makePath(destination, 'package.json'), newPkg, { spaces: 2 });
-		await PackageJsonFileCreator.init(app, this.dbType, this.ormType, destination).generatePackageJson();
-		await EnvCreator.createEnvFile(this.answers, app, destination);
+
+		// * Create package.json file dynamically
+		const packageJsonPath = this.makePath(destination, 'package.json')
+		const packageJson: PackageJson = await PackageJsonFileCreator
+			.init(app, this.dbType, this.ormType, packageJsonPath)
+			.generatePackageJson();
+		FsExt.writeJsonSync(this.makePath(destination, 'package.json'), packageJson, { spaces: 2 });
+
+		//* Create .env file dynamically
+		const envFilePath = this.makePath(destination, '.env')
+		const envFileContent = await EnvCreator.createEnvFile(this.answers);
+		FsExt.writeFileSync(envFilePath, envFileContent);
 
 		console.log("\n🎉👍🔥🎆🎇Done!")
 	}

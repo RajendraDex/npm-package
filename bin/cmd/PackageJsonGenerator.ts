@@ -1,5 +1,4 @@
 import { writeFileSync } from "fs"
-import { join } from "path"
 
 class PackageJsonGenerator {
 	static instance: PackageJsonGenerator
@@ -25,7 +24,7 @@ class PackageJsonGenerator {
 		return this;
 	}
 
-	public async generatePackageJson(): Promise<void> {
+	public async generatePackageJson(): Promise<Record<string, any>> {
 		const packageJson = {
 			name: this.projectName,
 			version: "1.0.0",
@@ -39,7 +38,8 @@ class PackageJsonGenerator {
 			devDependencies: this.getDevDependencies(),
 		}
 
-		writeFileSync(join(this.destination, "package.json"), JSON.stringify(packageJson, null, 2))
+		return packageJson
+		// writeFileSync(this.destination, JSON.stringify(packageJson, null, 2))
 	}
 
 	private getScripts(): Record<string, string> {
