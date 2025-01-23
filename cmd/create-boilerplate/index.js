@@ -51,7 +51,8 @@ const FilesToIgnore = [
 	"generator",
 	"bin",
 	"dist",
-	"example"
+	"example",
+	"src-rajenddra"
 ]
 
 const DepsToIgnore = ['fs-extra', '@types/fs-extra', 'standard-release']
@@ -62,6 +63,9 @@ const Templates = [
 	{ file: '.gitignore.husky', copyTo: '.husky/.gitignore' },
 	{ file: '.gitignore.root', copyTo: '.gitignore' },
 	{ file: '.dockerignore.root', copyTo: '.dockerignore' },
+	{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
+	{ file: "jest.config.root", copyTo: "jest.config.js" },
+	{ file: ".env.example.root", copyTo: ".env.example" },
 ]
 
 const PkgFieldsToKeep = ['type', 'main', 'types', 'scripts', '_moduleAliases', 'dependencies', 'devDependencies']

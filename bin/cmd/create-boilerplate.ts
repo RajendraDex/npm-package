@@ -21,6 +21,9 @@ const Templates = [
 	{ file: ".gitignore.husky", copyTo: ".husky/.gitignore" },
 	{ file: ".gitignore.root", copyTo: ".gitignore" },
 	{ file: ".dockerignore.root", copyTo: ".dockerignore" },
+	{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
+	{ file: "jest.config.root", copyTo: "jest.config.js" },
+	{ file: ".env.example.root", copyTo: ".env.example" },
 ];
 
 const FilesToIgnore = [
@@ -61,7 +64,8 @@ const FilesToIgnore = [
 	"generator",
 	"bin",
 	"dist",
-	"example"
+	"example",
+	"src-rajenddra"
 ];
 
 const PkgFieldsToKeep = ["type", "main", "types", "scripts", "_moduleAliases", "dependencies", "devDependencies"]
@@ -157,40 +161,40 @@ export class NodeJSStarterKit {
 
 		console.log("Preparing package.json ...")
 
-		const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, "package.json"))
-		const newPkg: PackageJson = {
-			name: app,
-		}
+		// const pkg: PackageJson = FsExt.readJsonSync(this.makePath(source, "package.json"))
+		// const newPkg: PackageJson = {
+		// 	name: app,
+		// }
 
-		for (const field of this.PkgFieldsToKeep) {
-			if (typeof pkg[field] !== "undefined") {
-				newPkg[field] = pkg[field]
-			}
-		}
+		// for (const field of this.PkgFieldsToKeep) {
+		// 	if (typeof pkg[field] !== "undefined") {
+		// 		newPkg[field] = pkg[field]
+		// 	}
+		// }
 
-		for (const dep of this.DepsToIgnore) {
-			if (newPkg.dependencies && newPkg.dependencies[dep]) {
-				delete newPkg.dependencies[dep]
-			}
+		// for (const dep of this.DepsToIgnore) {
+		// 	if (newPkg.dependencies && newPkg.dependencies[dep]) {
+		// 		delete newPkg.dependencies[dep]
+		// 	}
 
-			if (newPkg.devDependencies && newPkg.devDependencies[dep]) {
-				delete newPkg.devDependencies[dep]
-			}
-		}
+		// 	if (newPkg.devDependencies && newPkg.devDependencies[dep]) {
+		// 		delete newPkg.devDependencies[dep]
+		// 	}
+		// }
 
-		if (newPkg.scripts) {
-			newPkg.scripts = {
-				"build": "npm run clean && tsc",
-				"start": "node dist/app.bootstrap",
-				"dev": "npm run build && npm run start",
-				"clean": "rm -rf dist",
-				"lint": "eslint .",
-				"format": "prettier --write ."
-			}
-			delete newPkg.scripts.release
-		}
+		// if (newPkg.scripts) {
+		// 	newPkg.scripts = {
+		// 		"build": "npm run clean && tsc",
+		// 		"start": "node dist/app.bootstrap",
+		// 		"dev": "npm run build && npm run start",
+		// 		"clean": "rm -rf dist",
+		// 		"lint": "eslint .",
+		// 		"format": "prettier --write ."
+		// 	}
+		// 	delete newPkg.scripts.release
+		// }
 
-		FsExt.writeJsonSync(this.makePath(destination, "package.json"), newPkg, { spaces: 2 })
+		// FsExt.writeJsonSync(this.makePath(destination, "package.json"), newPkg, { spaces: 2 })
 
 		console.log("\nDone!")
 	}
