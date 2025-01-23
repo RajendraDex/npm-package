@@ -64,7 +64,7 @@ const Templates = [
 	{ file: '.dockerignore.root', copyTo: '.dockerignore' },
 ]
 
-const PkgFieldsToKeep = ['type', 'main', 'types', 'scripts', 'dependencies', 'devDependencies']
+const PkgFieldsToKeep = ['type', 'main', 'types', 'scripts', '_moduleAliases', 'dependencies', 'devDependencies']
 
 function main() {
 	console.log('NodeJS Starter Kit - Bootstrapping New Project')
@@ -121,7 +121,18 @@ App: ${app}
 
 	for (const field of PkgFieldsToKeep) {
 		if (typeof pkg[field] !== 'undefined') {
-			newPkg[field] = pkg[field]
+			if (field === "scripts") {
+				newPkg[field] = {
+					"build": "npm run clean && tsc",
+					"start": "node dist/app.bootstrap",
+					"dev": "npm run build && npm run start",
+					"clean": "rm -rf dist",
+					"lint": "eslint .",
+					"format": "prettier --write ."
+				}
+			} else {
+				newPkg[field] = pkg[field]
+			}
 		}
 	}
 

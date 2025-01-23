@@ -64,7 +64,7 @@ const FilesToIgnore = [
 	"example"
 ];
 
-const PkgFieldsToKeep = ["type", "main", "types", "_moduleAliases", "scripts", "dependencies", "devDependencies"]
+const PkgFieldsToKeep = ["type", "main", "types", "scripts", "_moduleAliases", "dependencies", "devDependencies"]
 
 const DepsToIgnore = ["fs-extra", "@types/fs-extra", "standard-release"]
 
@@ -165,8 +165,6 @@ export class NodeJSStarterKit {
 		for (const field of this.PkgFieldsToKeep) {
 			if (typeof pkg[field] !== "undefined") {
 				if (field === "scripts") {
-					newPkg[field] = pkg[field]
-				} else {
 					newPkg[field] = {
 						"build": "npm run clean && tsc",
 						"start": "node dist/app.bootstrap",
@@ -175,6 +173,8 @@ export class NodeJSStarterKit {
 						"lint": "eslint .",
 						"format": "prettier --write ."
 					}
+				} else {
+					newPkg[field] = pkg[field]
 				}
 			}
 		}
