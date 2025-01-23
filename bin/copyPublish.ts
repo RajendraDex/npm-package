@@ -14,6 +14,7 @@ export class CreateBoilerplate {
 		'tools', '.codeclimate.yml', '.npmignore', '.env', 'CONTRIBUTING.md',
 		'CHANGELOG.md', 'CODE_OF_CONDUCT.md', 'LICENSE', 'README.md', 'package.json',
 		'package-lock.json', 'yarn.lock', 'tsconfig.build.tsbuildinfo',
+
 	];
 
 	private static DepsToIgnore: string[] = [
@@ -21,9 +22,16 @@ export class CreateBoilerplate {
 	];
 
 	private static Templates: Template[] = [
+		{ file: 'ci.yml', copyTo: '.github/workflows/ci.yml' },
 		{ file: 'README.md', copyTo: 'README.md' },
+		{ file: '.gitignore.husky', copyTo: '.husky/.gitignore' },
 		{ file: '.gitignore.root', copyTo: '.gitignore' },
 		{ file: '.dockerignore.root', copyTo: '.dockerignore' },
+		{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
+		{ file: "jest.config.root", copyTo: "jest.config.js" },
+		{ file: ".env.example.root", copyTo: ".env.example" },
+		{ file: "package.json.root", copyTo: "package.json" },
+
 	];
 
 	private static PkgFieldsToKeep: string[] = [

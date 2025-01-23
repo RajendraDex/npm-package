@@ -24,6 +24,7 @@ const Templates = [
 	{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
 	{ file: "jest.config.root", copyTo: "jest.config.js" },
 	{ file: ".env.example.root", copyTo: ".env.example" },
+	{ file: "package.json.root", copyTo: "package.json" },
 ];
 
 const FilesToIgnore = [

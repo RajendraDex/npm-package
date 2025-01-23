@@ -52,7 +52,8 @@ const FilesToIgnore = [
 	"bin",
 	"dist",
 	"example",
-	"src-rajenddra"
+	"src-rajenddra",
+	"log"
 ]
 
 const DepsToIgnore = ['fs-extra', '@types/fs-extra', 'standard-release']
@@ -66,6 +67,7 @@ const Templates = [
 	{ file: "tsconfig.json.root", copyTo: "tsconfig.json" },
 	{ file: "jest.config.root", copyTo: "jest.config.js" },
 	{ file: ".env.example.root", copyTo: ".env.example" },
+	{ file: "package.json.root", copyTo: "package.json" },
 ]
 
 const PkgFieldsToKeep = ['type', 'main', 'types', 'scripts', '_moduleAliases', 'dependencies', 'devDependencies']
