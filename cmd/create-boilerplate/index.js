@@ -121,18 +121,7 @@ App: ${app}
 
 	for (const field of PkgFieldsToKeep) {
 		if (typeof pkg[field] !== 'undefined') {
-			if (field === "scripts") {
-				newPkg[field] = {
-					"build": "npm run clean && tsc",
-					"start": "node dist/app.bootstrap",
-					"dev": "npm run build && npm run start",
-					"clean": "rm -rf dist",
-					"lint": "eslint .",
-					"format": "prettier --write ."
-				}
-			} else {
-				newPkg[field] = pkg[field]
-			}
+			newPkg[field] = pkg[field]
 		}
 	}
 
@@ -145,7 +134,15 @@ App: ${app}
 			delete newPkg.devDependencies[dep]
 		}
 	}
-
+	//! This scripts are for the boilerplate
+	newPkg.scripts = {
+		"build": "npm run clean && tsc",
+		"start": "node dist/app.bootstrap",
+		"dev": "npm run build && npm run start",
+		"clean": "rm -rf dist",
+		"lint": "eslint .",
+		"format": "prettier --write ."
+	}
 	delete newPkg.scripts.release
 
 	FsExt.writeJsonSync(makePath(destination, 'package.json'), newPkg, { spaces: 2 })

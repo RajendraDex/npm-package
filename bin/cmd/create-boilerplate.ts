@@ -164,18 +164,7 @@ export class NodeJSStarterKit {
 
 		for (const field of this.PkgFieldsToKeep) {
 			if (typeof pkg[field] !== "undefined") {
-				if (field === "scripts") {
-					newPkg[field] = {
-						"build": "npm run clean && tsc",
-						"start": "node dist/app.bootstrap",
-						"dev": "npm run build && npm run start",
-						"clean": "rm -rf dist",
-						"lint": "eslint .",
-						"format": "prettier --write ."
-					}
-				} else {
-					newPkg[field] = pkg[field]
-				}
+				newPkg[field] = pkg[field]
 			}
 		}
 
@@ -190,6 +179,14 @@ export class NodeJSStarterKit {
 		}
 
 		if (newPkg.scripts) {
+			newPkg.scripts = {
+				"build": "npm run clean && tsc",
+				"start": "node dist/app.bootstrap",
+				"dev": "npm run build && npm run start",
+				"clean": "rm -rf dist",
+				"lint": "eslint .",
+				"format": "prettier --write ."
+			}
 			delete newPkg.scripts.release
 		}
 
