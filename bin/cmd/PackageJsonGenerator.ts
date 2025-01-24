@@ -100,24 +100,29 @@ class PackageJsonGenerator {
 			winston: "^3.14.2",
 			"winston-daily-rotate-file": "^5.0.0",
 			zod: "^3.23.8",
+			knex: "^3.1.0",
+			pg: "^8.13.1"
 		}
 
 		const ormSpecificDependencies = {
 			Knex: { knex: "^3.1.0" },
+			Sequelize: { sequelize: "^6.37.5" },
+			MongoDB: { mongoose: "^8.9.5" },
+			Prisma: { prisma: "^6.2.1" },
+			TypeORM: { typeorm: "^0.3.20" },
 		}
 
 		const databaseSpecificDependencies = {
-			postgresql: { pg: "^8.12.0" },
-			mysql: { mysql2: "latest" },
-			sqlite: { sqlite3: "latest" },
-			mongodb: { mongodb: "latest" },
+			postgresql: { pg: "^8.13.1" },
+			mysql: { mysql2: "^3.12.0" },
+			mongodb: { mongodb: "^6.12.0" },
 		}
 
 		return {
 			...commonDependencies,
-			...(ormSpecificDependencies[this.orm as keyof typeof ormSpecificDependencies] || {}),
-			...(databaseSpecificDependencies[this.database as keyof typeof databaseSpecificDependencies] || {}),
-			[this.getDatabaseDriver()]: "latest",
+			// ...(ormSpecificDependencies[this.orm as keyof typeof ormSpecificDependencies] || {}),
+			// ...(databaseSpecificDependencies[this.database as keyof typeof databaseSpecificDependencies] || {}),
+			// [this.getDatabaseDriver()]: "latest",
 		}
 	}
 
@@ -144,17 +149,18 @@ class PackageJsonGenerator {
 			"ts-jest": "^29.2.5",
 			"ts-node": "^10.9.2",
 			typescript: "^5.5.4",
+			"@types/knex": "^0.16.1"
 		}
 
 		const ormSpecificDevDependencies = {
 			Knex: { "@types/knex": "^0.16.1" },
-			Sequelize: { "sequelize-cli": "^6.2.0" },
-			Prisma: { prisma: "^4.0.0" },
+			Sequelize: { "sequelize-cli": "^6.2.2" },
+			Prisma: { prisma: "^6.2.1" },
 		}
 
 		return {
 			...commonDevDependencies,
-			...(ormSpecificDevDependencies[this.orm as keyof typeof ormSpecificDevDependencies] || {}),
+			// ...(ormSpecificDevDependencies[this.orm as keyof typeof ormSpecificDevDependencies] || {}),
 		}
 	}
 
