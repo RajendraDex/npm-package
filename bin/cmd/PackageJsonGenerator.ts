@@ -100,16 +100,16 @@ class PackageJsonGenerator {
 			winston: "^3.14.2",
 			"winston-daily-rotate-file": "^5.0.0",
 			zod: "^3.23.8",
-			knex: "^3.1.0",
-			pg: "^8.13.1"
+			// knex: "^3.1.0",
+			// pg: "^8.13.1"
 		}
 
 		const ormSpecificDependencies = {
-			Knex: { knex: "^3.1.0" },
-			Sequelize: { sequelize: "^6.37.5" },
-			MongoDB: { mongoose: "^8.9.5" },
-			Prisma: { prisma: "^6.2.1" },
-			TypeORM: { typeorm: "^0.3.20" },
+			knex: { knex: "^3.1.0" },
+			sequelize: { sequelize: "^6.37.5" },
+			mongoose: { mongoose: "^8.9.5" },
+			prisma: { prisma: "^6.2.1" },
+			typeorm: { typeorm: "^0.3.20" },
 		}
 
 		const databaseSpecificDependencies = {
@@ -120,9 +120,8 @@ class PackageJsonGenerator {
 
 		return {
 			...commonDependencies,
-			// ...(ormSpecificDependencies[this.orm as keyof typeof ormSpecificDependencies] || {}),
-			// ...(databaseSpecificDependencies[this.database as keyof typeof databaseSpecificDependencies] || {}),
-			// [this.getDatabaseDriver()]: "latest",
+			...(ormSpecificDependencies[this.orm as keyof typeof ormSpecificDependencies] || {}),
+			...(databaseSpecificDependencies[this.database as keyof typeof databaseSpecificDependencies] || {}),
 		}
 	}
 
@@ -149,18 +148,18 @@ class PackageJsonGenerator {
 			"ts-jest": "^29.2.5",
 			"ts-node": "^10.9.2",
 			typescript: "^5.5.4",
-			"@types/knex": "^0.16.1"
+			// "@types/knex": "^0.16.1"
 		}
 
 		const ormSpecificDevDependencies = {
-			Knex: { "@types/knex": "^0.16.1" },
-			Sequelize: { "sequelize-cli": "^6.2.2" },
-			Prisma: { prisma: "^6.2.1" },
+			knex: { "@types/knex": "^0.16.1" },
+			sequelize: { "sequelize-cli": "^6.2.2" },
+			prisma: { prisma: "^6.2.1" },
 		}
 
 		return {
 			...commonDevDependencies,
-			// ...(ormSpecificDevDependencies[this.orm as keyof typeof ormSpecificDevDependencies] || {}),
+			...(ormSpecificDevDependencies[this.orm as keyof typeof ormSpecificDevDependencies] || {}),
 		}
 	}
 
@@ -173,7 +172,7 @@ class PackageJsonGenerator {
 		}
 
 		if (!(this.database in drivers)) {
-			throw new Error("Unsupported database")
+			return "pg"
 		}
 
 		return drivers[this.database as keyof typeof drivers]

@@ -104,7 +104,7 @@ export const migrateTenantDatabase = async (tenantName: string) => {
  * Executes the migration process.
  */
 const migrateDatabases = async () => {
-  await migrateDatabase('scheduling_master');
+  await migrateDatabase(process.env.MASTER_DB_NAME!);
 };
 
 // New function to handle tenant migration from command line
@@ -116,7 +116,7 @@ const migrateTenant = async (tenantName: string) => {
 const fetchAllTenants = async (): Promise<Array<{ tenant_subdomain: string }>> => {
   const knexMain = getKnexWithConfig({
     ...defaultDatabaseCredentials,
-    database: 'scheduling_master' // Assuming 'saas_scheduling' is your main database
+    database: process.env.MASTER_DB_NAME! // Assuming 'saas_scheduling' is your main database
   }, './dist/db/migrations/master');
 
   try {
@@ -127,7 +127,7 @@ const fetchAllTenants = async (): Promise<Array<{ tenant_subdomain: string }>> =
 };
 
 // Function to run latest migrations for all tenants
- export const migrateAllTenants = async () => {
+export const migrateAllTenants = async () => {
   const tenants = await fetchAllTenants();
   for (const tenant of tenants) {
     await migrateTenantDatabase(tenant.tenant_subdomain);
@@ -149,11 +149,11 @@ if (require.main === module) {
     });
   } else {
     migrateDatabases() // Call the function to migrate the master database
-    .then(() => {
-      logger.info('Master database migration completed.');
-    })
-    .catch((err) => {
-      logger.error('Master database migration failed:', err);
-    });
+      .then(() => {
+        logger.info('Master database migration completed.');
+      })
+      .catch((err) => {
+        logger.error('Master database migration failed:', err);
+      });
   }
 }

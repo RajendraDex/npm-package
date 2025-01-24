@@ -26,7 +26,13 @@ program
   // .argument('[name]', 'Project name')
   .action(async () => {
     try {
-      const answers = await inquirer.prompt(questions as any) as Answers;
+      let answers = await inquirer.prompt(questions as any) as Answers;
+      answers = {
+        ...answers,
+        dbType: 'postgresql',
+        ormType: 'knex',
+        copyFrom: 'create-boilerplate',
+      }
       console.log("🚀 -------- file: index.ts:30 -------- .action -------- answers:", answers);
 
       const projectName = answers.projectName as string;
