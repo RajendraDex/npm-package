@@ -79,7 +79,6 @@ class PackageJsonGenerator {
 	private getDependencies(): Record<string, string> {
 		const commonDependencies = {
 			"@apollo/server": "^4.11.0",
-			"apollo-server-express": "^3.13.0",
 			async: "^3.2.6",
 			bcrypt: "^5.1.1",
 			"cli-progress": "^3.12.0",
@@ -89,6 +88,7 @@ class PackageJsonGenerator {
 			express: "^4.19.2",
 			"express-rate-limit": "^7.4.0",
 			graphql: "^16.9.0",
+			"graphql-tag": "^2.12.6",
 			helmet: "^7.1.0",
 			json2csv: "^6.0.0-alpha.2",
 			jsonwebtoken: "^9.0.2",
