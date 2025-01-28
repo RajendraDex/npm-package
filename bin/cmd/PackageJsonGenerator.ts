@@ -131,6 +131,7 @@ class PackageJsonGenerator {
 			"@types/bcrypt": "^5.0.2",
 			"@types/cli-progress": "^3.11.6",
 			"@types/compression": "^1.7.5",
+			"@types/cors": "^2.8.17",
 			"@types/express": "^4.17.21",
 			"@types/graphql": "^14.5.0",
 			"@types/jest": "^29.5.12",
