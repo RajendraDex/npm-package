@@ -1,6 +1,6 @@
 {
   "name": "rajendra-npm-package",
-  "version": "1.0.37",
+  "version": "1.0.38",
   "main": "dist/src/app.bootstrap.js",
   "scripts": {
     "build": "npm run clean && tsc",

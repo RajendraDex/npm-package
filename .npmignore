@@ -5,3 +5,10 @@ test/
 .DS_Store
 dist/
 .npmrc
+logs/
+docs/
+src/
+generator/
+.env
+cmd/
+bin/
