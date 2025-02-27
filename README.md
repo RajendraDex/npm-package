@@ -44,14 +44,12 @@ Installation
 Install the CLI tool globally:
 
 ```bash
-Copy
 npm install -g siteweaver-service-layer
-
+```bash
 
 Create a new project:
 
 ```bash
-Copy
 siteweaver-service-layer create
 Follow the prompts to configure your project:
 
@@ -68,32 +66,27 @@ Copy
 cd <project-name>
 Install dependencies:
 
-bash
-Copy
+```bash
 npm install
 Usage
 Start the Project
 Build the project:
 
-bash
-Copy
+```bash
 npm run build
 Run the project:
 
-bash
-Copy
+```bash
 npm start
 Run Migrations
 To apply database migrations:
 
-bash
-Copy
+```bash
 npm run migrate:API
 Development Mode
 For development, use:
 
-bash
-Copy
+```bash
 npm run dev
 This will:
 
